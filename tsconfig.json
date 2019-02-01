@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./build/",
+    "sourceMap": true,
+    "strict": false,
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "module": "es2015",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "moduleResolution": "node",
+    "target": "es5",
+    "lib": [
+      "es2016",
+      "dom"
+    ],
+    "paths": {
+      "@api": [
+        "src/generated-client"
+      ]
+    }
+  },
+  "include": [
+    "./src/main/js/**/*.ts",
+    "./typings.d.ts"
+  ]
+}

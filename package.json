@@ -1,0 +1,27 @@
+{
+  "name": "tracker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Clemens Grabmann <Clemens.Grabmann@catalysts.cc>",
+  "license": "MIT",
+  "dependencies": {
+    "vue": "^2.5.22",
+    "vue-class-component": "^6.3.2",
+    "vue-hot-reload-api": "^2.3.1",
+    "vuetify": "^1.4.4",
+    "vuex": "^3.1.0",
+    "vuex-class": "^0.3.1"
+  },
+  "devDependencies": {
+    "@vue/component-compiler-utils": "^2.5.2",
+    "material-design-icons-iconfont": "^4.0.4",
+    "parcel-bundler": "^1.11.0",
+    "typescript": "^3.3.1",
+    "vue-template-compiler": "^2.5.22"
+  },
+  "scripts": {
+    "dev": "parcel watch src/main/frontend/index.html -d build/resources/main/vue/static",
+    "headless": "parcel src/main/frontend/index.html -d build/resources/main/vue/static",
+    "build": "parcel build src/main/frontend/index.html -d build/resources/main/vue/static"
+  }
+}
