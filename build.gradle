@@ -16,6 +16,10 @@ buildscript {
     }
 }
 
+plugins {
+    id 'org.hidetake.ssh' version '2.9.0'
+}
+
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
@@ -49,6 +53,14 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'com.h2database:h2'
+}
+
+remotes {
+    derletztedodo {
+        host = 'derletztedodo.at'
+        user = 'jugger'
+        identity = file("${System.properties['user.home']}/.ssh/jugger2019")
+    }
 }
 
 ext.serverOutputDir = "$buildDir/generated/openApi/spring"
@@ -94,3 +106,24 @@ node {
 }
 
 compileJava.dependsOn buildSpringServerApi
+
+bootJar {
+    launchScript()
+}
+
+task deploy {
+    doLast {
+        ssh.run {
+            session(remotes.derletztedodo) {
+                execute 'rm -f deploy/tracker-0.0.1-SNAPSHOT.jar'
+                execute 'rm -f deploy/turniere.jar'
+                put from: 'build/libs/tracker-0.0.1-SNAPSHOT.jar', into: 'deploy'
+                execute 'mv deploy/tracker-0.0.1-SNAPSHOT.jar deploy/turniere.jar'
+                execute 'chmod 500 deploy/turniere.jar'
+                execute 'sudo systemctl restart turniere.service'
+            }
+        }
+    }
+}
+
+deploy.dependsOn build
