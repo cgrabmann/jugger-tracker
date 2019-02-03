@@ -6,6 +6,7 @@ info:
 
 servers:
   - url: 'https://jugger.derletztedodo.at'
+  - url: 'http://localhost:8080'
 
 paths:
   /api/users:
@@ -140,7 +141,7 @@ paths:
     get:
       tags:
         - Training
-      summary: Returns a training by ID
+      summary: Returns a training by date
       operationId: getTraining
       parameters:
         - in: path
@@ -160,8 +161,16 @@ paths:
     post:
       tags:
         - Training
-      summary: Updates a training by ID
+      summary: Updates a training by date
       operationId: updateTraining
+      parameters:
+        - in: path
+          name: date
+          required: true
+          schema:
+            type: string
+            format: date
+          description: training date
       requestBody:
         content:
           application/json:
@@ -173,7 +182,7 @@ paths:
     delete:
       tags:
         - Training
-      summary: Deletes a training by ID
+      summary: Deletes a training by date
       operationId: deleteTraining
       parameters:
         - in: path
@@ -221,12 +230,9 @@ components:
         id:
           type: integer
           format: int64
-        name:
-          type: string
-          maxLength: 20
     Training:
       properties:
-        id:
+        date:
           type: string
           format: date
         type:
@@ -235,5 +241,4 @@ components:
         participants:
           type: array
           items:
-            type: integer
-            format: int64
+            $ref: '#/components/schemas/User'

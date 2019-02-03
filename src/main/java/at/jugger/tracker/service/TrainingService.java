@@ -9,11 +9,11 @@ import java.util.List;
 public interface TrainingService {
     List<Training> getTrainings();
 
-    Training getTraining(@NotNull LocalDate date);
+    @NotNull Training getTraining(@NotNull LocalDate date);
 
     void createTraining(@NotNull Training training);
 
-    void updateTraining(@NotNull Training training);
+    void updateTraining(@NotNull LocalDate date, @NotNull Training training);
 
     void deleteTraining(@NotNull LocalDate date);
 }
