@@ -41,8 +41,8 @@ public class TrainingController implements TrainingApiDelegate {
     }
 
     @Override
-    public ResponseEntity<Void> updateTraining(@NotNull Training training) {
-        trainingService.updateTraining(training);
+    public ResponseEntity<Void> updateTraining(@NotNull LocalDate date, @NotNull Training training) {
+        trainingService.updateTraining(date, training);
         return ResponseEntity.ok().build();
     }
 }

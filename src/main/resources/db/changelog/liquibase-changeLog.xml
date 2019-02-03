@@ -1,21 +1,18 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
-   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
-   http://www.liquibase.org/xml/ns/dbchangelog
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <changeSet id="1" author="clemens">
         <createTable tableName="user">
-            <column name="userId" type="int" autoIncrement="true">
+            <column name="user_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
-            <column name="firstName" type="varchar(20)">
+            <column name="first_name" type="varchar(20)">
                 <constraints nullable="false"/>
             </column>
-            <column name="lastName" type="varchar(20)">
+            <column name="last_name" type="varchar(20)">
                 <constraints nullable="false"/>
             </column>
             <column name="email" type="varchar(50)">
@@ -24,6 +21,33 @@
         </createTable>
         <rollback>
             <dropTable tableName="user"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="2" author="dodo">
+        <createTable tableName="training">
+            <column name="training_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="date" type="datetime">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="type" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="user_participates_training">
+            <column name="training_id" type="int">
+                <constraints primaryKey="true" nullable="false" foreignKeyName="fk_participation_training"
+                             references="training(training_id)"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints primaryKey="true" nullable="false" foreignKeyName="fk_participation_user"
+                             references="user(user_id)"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="training"/>
+            <dropTable tableName="user_participates_training"/>
         </rollback>
     </changeSet>
 
