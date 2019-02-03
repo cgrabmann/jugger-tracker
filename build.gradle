@@ -50,6 +50,7 @@ dependencies {
     compileOnly 'org.springframework.boot:spring-boot-configuration-processor'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.3.0.Beta2'
+    annotationProcessor 'org.projectlombok:lombok:1.16.20'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'com.h2database:h2'
@@ -76,14 +77,14 @@ task buildSpringServerApi(type: org.openapitools.generator.gradle.plugin.tasks.G
     ignoreFileOverride = "$rootDir/src/main/openapi/.openapi-generator-ignore".toString()
     outputDir = serverOutputDir.toString()
     configOptions = [
-            apiPackage: "at.jugger.tracker.api",
-            invokerPackage: "at.jugger.tracker.invoker",
-            modelPackage: "at.jugger.tracker.dto",
-            dateLibrary: "java8-localdatetime",
-            configPackage: "at.jugger.tracker.config",
-            delegatePattern: true,
+            apiPackage       : "at.jugger.tracker.api",
+            invokerPackage   : "at.jugger.tracker.invoker",
+            modelPackage     : "at.jugger.tracker.dto",
+            dateLibrary      : "java8-localdatetime",
+            configPackage    : "at.jugger.tracker.config",
+            delegatePattern  : true,
             useBeanValidation: true,
-            useTags: true
+            useTags          : true
     ]
 }
 
