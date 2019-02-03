@@ -17,7 +17,7 @@
     ],
     "paths": {
       "@api": [
-        "src/generated-client"
+        "build/generated/openApi/ts"
       ]
     }
   },

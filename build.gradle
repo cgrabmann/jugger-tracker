@@ -63,7 +63,11 @@ remotes {
     }
 }
 
-ext.serverOutputDir = "$buildDir/generated/openApi/spring"
+ext {
+    parcelOutputDir = "${buildDir}/generated/frontend/vue"
+    serverOutputDir = "$buildDir/generated/openApi/spring"
+    tsOutputDir = "$buildDir/generated/openApi/ts"
+}
 
 task buildSpringServerApi(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
     generatorName = "spring"
@@ -83,8 +87,12 @@ task buildSpringServerApi(type: org.openapitools.generator.gradle.plugin.tasks.G
     ]
 }
 
-ext {
-    parcelOutputDir = "${project.buildDir}/resources/main/vue"
+task buildTsClientApi(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+    generatorName = "typescript-fetch"
+    validateSpec = true
+    inputSpec = "$rootDir/src/main/openapi/tracker.yaml".toString()
+    ignoreFileOverride = "$rootDir/src/main/openapi/.openapi-generator-ignore".toString()
+    outputDir = tsOutputDir.toString()
 }
 
 sourceSets {
@@ -105,7 +113,17 @@ node {
     yarnVersion = '1.13.0'
 }
 
+task yarnBuild(type: YarnTask, dependsOn: ['yarn'], group: 'node') {
+    args = ['build']
+    inputs.file("${projectDir}/package.json")
+    inputs.dir("${projectDir}/src/main/frontend")
+    inputs.dir("${tsOutputDir}")
+    outputs.dir(parcelOutputDir)
+}
+
 compileJava.dependsOn buildSpringServerApi
+yarnBuild.dependsOn buildTsClientApi
+processResources.dependsOn yarnBuild
 
 bootJar {
     launchScript()
