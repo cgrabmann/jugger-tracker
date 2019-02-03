@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": ".",
     "outDir": "./build/",
     "sourceMap": true,
     "strict": false,
@@ -15,11 +15,10 @@
       "es2016",
       "dom"
     ],
-    "paths": {
-      "@api": [
-        "build/generated/openApi/ts"
-      ]
-    }
+    "routDirs": [
+      "src/frontend",
+      "build/generated/openApi/ts"
+    ]
   },
   "include": [
     "./src/main/js/**/*.ts",
