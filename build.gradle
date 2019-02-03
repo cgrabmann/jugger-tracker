@@ -51,11 +51,7 @@ dependencies {
     // Database
     implementation 'org.liquibase:liquibase-core'
     testRuntimeOnly 'com.h2database:h2'
-    implementation('org.mariadb.jdbc:mariadb-java-client:1.2.0') {
-        exclude group: 'net.java.dev.jna'
-    }
-    implementation 'net.java.dev.jna:jna:4.1.0'
-    implementation 'net.java.dev.jna:jna-platform:4.1.0'
+    implementation 'org.mariadb.jdbc:mariadb-java-client'
 
     // MapStruct
     compileOnly 'org.mapstruct:mapstruct-jdk8:1.3.0.Beta2'
