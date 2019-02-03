@@ -3,21 +3,21 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 import Vue from 'vue';
 import Vuetify from 'vuetify';
-import Test from './vue/Test.vue'
-import {User} from '@api'
+import store from './vue/store'
+import Jugger from './vue/Jugger.vue'
+import router from './vue/router/router';
 
-Vue.use(Vuetify, {iconfont: 'md'});
+Vue.use(Vuetify, {
+    iconfont: 'md'
+});
 
 
 new Vue({
     el: '#app',
-    data: {
-        user: {
-            id: 10,
-            name: 'test'
-        } as User
-    },
+    store,
+    router,
+    data: {},
     render(r) {
-        return r(Test, {});
+        return r(Jugger, {});
     }
 });
