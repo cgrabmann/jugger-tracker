@@ -4,7 +4,11 @@ import at.jugger.tracker.config.MapperConfig;
 import at.jugger.tracker.domain.UserEntity;
 import at.jugger.tracker.dto.User;
 import at.jugger.tracker.dto.UserData;
-import org.mapstruct.*;
+import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
 
 import java.util.List;
 
@@ -12,19 +16,17 @@ import java.util.List;
 public interface UserMapper {
 
     @Mappings({
-            @Mapping(target = "id", source = "userId"),
-            @Mapping(target = "firstName", source = "firstName"),
-            @Mapping(target = "lastName", source = "lastName"),
-            @Mapping(target = "email", source = "email")
+            @Mapping(target = "id", source = "userId")
     })
     User toDto(UserEntity entity);
 
     List<User> toDtos(List<UserEntity> entities);
 
-    @InheritInverseConfiguration
     UserEntity toEntity(UserData user, @MappingTarget UserEntity entity);
 
-    @InheritConfiguration
     UserEntity toEntity(UserData newUser);
+
+    @InheritInverseConfiguration
+    UserEntity toEntity(User user);
 
 }
