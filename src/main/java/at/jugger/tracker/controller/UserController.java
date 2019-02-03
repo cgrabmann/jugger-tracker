@@ -1,8 +1,8 @@
 package at.jugger.tracker.controller;
 
 import at.jugger.tracker.api.UserApiDelegate;
-import at.jugger.tracker.dto.NewUser;
 import at.jugger.tracker.dto.User;
+import at.jugger.tracker.dto.UserData;
 import at.jugger.tracker.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +31,7 @@ public class UserController implements UserApiDelegate {
     }
 
     @Override
-    public ResponseEntity<User> createUser(@NotNull NewUser newUser) {
+    public ResponseEntity<User> createUser(@NotNull UserData newUser) {
         return ResponseEntity.ok(userService.createUser(newUser));
     }
 
@@ -47,14 +47,7 @@ public class UserController implements UserApiDelegate {
     }
 
     @Override
-    public ResponseEntity<User> updateUser(@NotNull Long id, @NotNull User user) {
-        if (!id.equals(user.getId())) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Path user id (" + id + ") and id of user object (" + user.getId() + ") do not match"
-            );
-        }
-
-        return ResponseEntity.ok(userService.updateUser(user));
+    public ResponseEntity<User> updateUser(@NotNull Long id, @NotNull UserData user) {
+        return ResponseEntity.ok(userService.updateUser(id, user));
     }
 }

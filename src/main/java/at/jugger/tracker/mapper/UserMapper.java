@@ -2,8 +2,8 @@ package at.jugger.tracker.mapper;
 
 import at.jugger.tracker.config.MapperConfig;
 import at.jugger.tracker.domain.UserEntity;
-import at.jugger.tracker.dto.NewUser;
 import at.jugger.tracker.dto.User;
+import at.jugger.tracker.dto.UserData;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -22,10 +22,9 @@ public interface UserMapper {
     List<User> toDtos(List<UserEntity> entities);
 
     @InheritInverseConfiguration
-    @Mapping(target = "userId", ignore = true)
-    UserEntity toEntity(User user, @MappingTarget UserEntity entity);
+    UserEntity toEntity(UserData user, @MappingTarget UserEntity entity);
 
     @InheritConfiguration
-    UserEntity toEntity(NewUser newUser);
+    UserEntity toEntity(UserData newUser);
 
 }

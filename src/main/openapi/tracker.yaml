@@ -34,7 +34,7 @@ paths:
           application/json:
             schema:
               required: true
-              $ref: '#/components/schemas/NewUser'
+              $ref: '#/components/schemas/UserData'
       responses:
         200:
           description: OK
@@ -81,7 +81,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserData'
       responses:
         200:
           description: OK
@@ -109,7 +109,7 @@ paths:
 
 components:
   schemas:
-    NewUser:
+    UserData:
       type: object
       required:
         - firstName
@@ -128,7 +128,7 @@ components:
           format: email
     User:
       allOf:
-        - $ref: '#/components/schemas/NewUser'
+        - $ref: '#/components/schemas/UserData'
         - type: object
           required:
             - id
