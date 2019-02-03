@@ -64,6 +64,12 @@ remotes {
     }
 }
 
+test {
+    testLogging {
+        exceptionFormat = 'full'
+    }
+}
+
 ext {
     parcelOutputDir = "${buildDir}/generated/frontend/vue"
     serverOutputDir = "$buildDir/generated/openApi/spring"
