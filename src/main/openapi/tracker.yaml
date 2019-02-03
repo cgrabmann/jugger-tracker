@@ -118,10 +118,14 @@ components:
       properties:
         firstName:
           type: string
+          maxLength: 20
         lastName:
           type: string
+          maxLength: 20
         email:
           type: string
+          maxLength: 50
+          format: email
     User:
       allOf:
         - $ref: '#/components/schemas/NewUser'
