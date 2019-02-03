@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUsers() {
+    public @NotNull List<User> getUsers() {
         return userMapper.toDtos(userRepository.findAll());
     }
 
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(Long id, UserData user) {
+    public @NotNull User updateUser(Long id, UserData user) {
         UserEntity userEntity = Objects.requireNonNull(
                 userRepository.findByUserId(id),
                 "User with ID '" + id + "' not fund."
