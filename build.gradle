@@ -64,13 +64,23 @@ remotes {
     }
 }
 
+test {
+    testLogging {
+        exceptionFormat = 'full'
+    }
+}
+
 ext {
     parcelOutputDir = "${buildDir}/generated/frontend/vue"
     serverOutputDir = "$buildDir/generated/openApi/spring"
     tsOutputDir = "$buildDir/generated/openApi/ts"
 }
 
-task buildSpringServerApi(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+task cleanSpringServerApi(type: Delete) {
+    delete serverOutputDir
+}
+
+task buildSpringServerApi(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask, dependsOn: cleanSpringServerApi) {
     generatorName = "spring"
     validateSpec = true
     inputSpec = "$rootDir/src/main/openapi/tracker.yaml".toString()
@@ -88,7 +98,11 @@ task buildSpringServerApi(type: org.openapitools.generator.gradle.plugin.tasks.G
     ]
 }
 
-task buildTsClientApi(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+task cleanTsClientApi(type: Delete) {
+    delete tsOutputDir
+}
+
+task buildTsClientApi(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask, dependsOn: cleanTsClientApi) {
     generatorName = "typescript-fetch"
     validateSpec = true
     inputSpec = "$rootDir/src/main/openapi/tracker.yaml".toString()
