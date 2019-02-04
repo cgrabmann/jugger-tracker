@@ -5,6 +5,7 @@
   "author": "Clemens Grabmann <Clemens.Grabmann@catalysts.cc>",
   "license": "MIT",
   "dependencies": {
+    "portable-fetch": "^3.0.0",
     "vue": "^2.5.22",
     "vue-class-component": "^6.3.2",
     "vuetify": "^1.4.4",
@@ -22,6 +23,9 @@
     "vue-router": "^3.0.2",
     "vue-template-compiler": "^2.5.22",
     "vue2-breadcrumbs": "^2.0.0"
+  },
+  "alias": {
+    "juggerApi": "./build/generated/openApi/ts/index.ts"
   },
   "scripts": {
     "dev": "parcel watch src/main/frontend/index.html -d build/generated/frontend/vue/static",

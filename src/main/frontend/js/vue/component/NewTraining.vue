@@ -25,26 +25,39 @@
     import Vue from 'vue';
     import Component from 'vue-class-component';
     import {Training} from './api'
-    import {State} from "vuex-class";
+    import {Action, State} from "vuex-class";
     import {Namespace} from "../store/namespace";
-    import {UserState} from "../store/types";
+    import {TrainingState, UserState} from "../store/types";
     import User from "./User.vue";
+
+    @Component({
+        beforeRouteEnter(to, from, next) {
+            next(vm => {
+                vm.openNew(to.params.id);
+                next();
+            })
+        },
+        beforeRouteUpdate(to, from, next) {
+            this.openNew(to.params.id);
+            next();
+        }
+    })
 
     @Component
     export default class NewTraining extends Vue {
         @State(Namespace.USER.namespace) userState: UserState;
+        @State(Namespace.TRAINING.namespace) trainingState: TrainingState;
+        @Action('createTraining', Namespace.TRAINING) createTraining;
+
+        openNew() {
+            this.trainingState.editTraining = {
+                date: "",
+                type: "klein",
+                participants: []
+            } as Training;
+        }
 
         datepicker;
-        users: User[];
-        training: Training = {
-            date: "",
-            type: "klein",
-            participants: []
-        };
-
-        created() {
-            this.fetchUsers();
-        }
 
         get trainingTypes(): string[] {
             return ["klein", "groß", "spezial"]
@@ -52,24 +65,6 @@
 
         get users(): User[] {
             return this.userState.users;
-        }
-
-        fetchUsers() {
-            this.error = this.post = null
-            this.loading = true
-            // replace `getPost` with your data fetching util / API wrapper
-            getPost(this.$route.params.id, (err, post) => {
-                this.loading = false
-                if (err) {
-                    this.error = err.toString()
-                } else {
-                    this.post = post
-                }
-            })
-        }
-
-        save() {
-            console.log(this.training);
         }
     }
 </script>
