@@ -15,13 +15,15 @@
       "es2016",
       "dom"
     ],
-    "routDirs": [
-      "src/frontend",
-      "build/generated/openApi/ts"
-    ]
+    "paths": {
+      "@juggerApi": [
+        "./build/generated/openApi/ts"
+      ]
+    }
   },
   "include": [
     "./src/main/js/**/*.ts",
-    "./typings.d.ts"
+    "./typings.d.ts",
+    "./build/generated/openApi/ts/**/*.ts"
   ]
 }

@@ -5,7 +5,7 @@ export interface RootState {
 }
 
 export interface UserState {
-    user: User,
+    editUser: User,
     users: User[]
 }
 

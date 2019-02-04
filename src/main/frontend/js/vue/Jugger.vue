@@ -4,12 +4,12 @@
                       fixed
                       :value="true"
                       app>
-            <v-btn flat
+            <v-btn depressed
                    to="/overview">
                 <span>Überblick</span>
                 <v-icon>home</v-icon>
             </v-btn>
-            <v-btn flat
+            <v-btn depressed
                    to="/user">
                 <span>User</span>
                 <v-icon>account_box</v-icon>
@@ -19,7 +19,11 @@
                              fixed
                              app
                              permanent>
-            <v-list light dense class="pt-2">
+            <v-list dense class="pt-0">
+                <v-toolbar>
+                    <v-toolbar-title>Jugger Vienna</v-toolbar-title>
+                </v-toolbar>
+                <v-spacer class="pt-3"></v-spacer>
                 <v-list-tile to="/overview">
                     <v-list-tile-action>
                         <v-icon>home</v-icon>
@@ -39,9 +43,9 @@
             </v-list>
         </v-navigation-drawer>
         <v-content>
-            <v-container fluid>
-                <router-view/>
-            </v-container>
+            <keep-alive>
+                <router-view></router-view>
+            </keep-alive>
         </v-content>
     </v-app>
 </template>
