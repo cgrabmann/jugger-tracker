@@ -1,11 +1,12 @@
 import {Module} from 'vuex';
 import {RootState, UserState} from './types';
-import {UserData, User} from './api'
+import {User, UserData} from './api'
 import {UserAPI} from '../../api';
 
 const namespaced = true;
 const state: UserState = {
-    user: {} as User
+    user: {} as User,
+    users: [] as User
 };
 
 export const UserModule: Module<UserState, RootState> = {
@@ -19,11 +20,18 @@ export const UserModule: Module<UserState, RootState> = {
         updateUser(context, user: User): any {
             return UserAPI.Instance.getUserAPI().updateUser(user.id, user)
                 .then((response: User) => context.commit('userLoaded', response));
+        },
+        getUsers(context): any {
+            return UserAPI.Instance.getUserAPI().getUsers()
+                .then((response: User[]) => context.commit('usersLoaded', response));
         }
     },
     mutations: {
         userLoaded(state, user: User) {
             state.user = user;
+        },
+        usersLoaded(state, users: User[]) {
+            state.users = users;
         }
     }
 };

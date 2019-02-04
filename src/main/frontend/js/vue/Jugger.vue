@@ -2,7 +2,8 @@
     <v-app light>
         <v-bottom-nav v-if="$vuetify.breakpoint.smAndDown"
                       fixed
-                      :value="true">
+                      :value="true"
+                      app>
             <v-btn flat
                    to="/overview">
                 <span>Überblick</span>
@@ -15,6 +16,8 @@
             </v-btn>
         </v-bottom-nav>
         <v-navigation-drawer v-else
+                             fixed
+                             app
                              permanent>
             <v-list light dense class="pt-2">
                 <v-list-tile to="/overview">
