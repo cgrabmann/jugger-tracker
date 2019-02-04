@@ -10,6 +10,6 @@ export interface UserState {
 }
 
 export interface TrainingState {
-    trainings: Training[]
+    trainings: Training[],
     editTraining: Training
 }
