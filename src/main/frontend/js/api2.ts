@@ -1,4 +1,4 @@
-import {TrainingsApi, UserApi} from './api'
+import {Configuration, TrainingApi, TrainingApiFactory, UserApi} from 'juggerApi/api'
 
 export class UserAPI {
     private static _instance: UserAPI = new UserAPI();
@@ -13,7 +13,7 @@ export class UserAPI {
     }
 
     public init(host: string) {
-        this._userAPI = new UserApi(null, host)
+        this._userAPI = new UserApi(null, host);
     }
 
     public getUserAPI(): UserApi {
@@ -23,10 +23,12 @@ export class UserAPI {
 
 export class TrainingAPI {
     private static _instance: TrainingAPI = new TrainingAPI();
-    private _trainingAPI: TrainingsApi;
+    private _trainingAPI: TrainingApi;
 
     private constructor() {
         TrainingAPI._instance = this;
+        console.log("Constructing TrainingAPI");
+        this.init("http://localhost:8080/");
     }
 
     public static get Instance() {
@@ -34,10 +36,11 @@ export class TrainingAPI {
     }
 
     public init(host: string) {
-        this._trainingAPI = new TrainingApi(null, host)
+        this._trainingAPI = new TrainingApi(null, host);
     }
 
-    public getTrainingAPI(): UserApi {
+    public getTrainingAPI(): TrainingApi {
+        console.log("returning TrainingAPI");
         return this._trainingAPI;
     }
 }

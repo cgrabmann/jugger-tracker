@@ -35,7 +35,7 @@
             this.getTrainings();
         }
 
-        get users() {
+        get trainings() {
             return this.trainingState.trainings;
         }
 

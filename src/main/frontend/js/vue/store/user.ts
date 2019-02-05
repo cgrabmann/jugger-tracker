@@ -1,7 +1,7 @@
 import {Module} from 'vuex';
 import {RootState, UserState} from './types';
 import {User, UserData} from './api'
-import {UserAPI} from '../../api';
+import {UserAPI} from '../../api2';
 
 const namespaced = true;
 const state: UserState = {
