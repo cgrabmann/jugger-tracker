@@ -17,12 +17,15 @@ export const TrainingModule: Module<TrainingState, RootState> = {
     namespaced,
     state,
     actions: {
-        /*createTraining(context, training: Training): any {
+        createTraining(context, training: Training): any {
             return TrainingAPI.Instance.getTrainingAPI().createTraining(training);
         },
         updateTraining(context, date: string, training: Training): any {
             return TrainingAPI.Instance.getTrainingAPI().updateTraining(date, training);
-        },*/
+        },
+        deleteTraining(context, date: string): any {
+            return TrainingAPI.Instance.getTrainingAPI().deleteTraining(date);
+        },
         getTrainings(context): any {
             return TrainingAPI.Instance.getTrainingAPI().getTrainings().then((response: Training[]) => {
                 context.commit('trainingsLoaded', response)
