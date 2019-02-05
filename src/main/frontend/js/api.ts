@@ -1,4 +1,5 @@
 import {Configuration, TrainingApi, TrainingApiFactory, UserApi} from 'juggerApi/api'
+import * as portableFetch from "portable-fetch";
 
 export class UserAPI {
     private static _instance: UserAPI = new UserAPI();
@@ -28,7 +29,7 @@ export class TrainingAPI {
     private constructor() {
         TrainingAPI._instance = this;
         console.log("Constructing TrainingAPI");
-        this.init("http://localhost:8080/");
+        this.init("http://localhost:8080");
     }
 
     public static get Instance() {
@@ -36,7 +37,7 @@ export class TrainingAPI {
     }
 
     public init(host: string) {
-        this._trainingAPI = new TrainingApi(null, host);
+        this._trainingAPI = new TrainingApi(null, host, portableFetch.default);
     }
 
     public getTrainingAPI(): TrainingApi {

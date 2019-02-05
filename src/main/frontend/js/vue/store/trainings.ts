@@ -1,7 +1,7 @@
 import {Module} from 'vuex';
 import {RootState, TrainingState} from './types';
 import {Training, User} from './api'
-import {TrainingAPI} from '../../api2';
+import {TrainingAPI} from '../../api';
 
 const namespaced = true;
 const state: TrainingState = {

@@ -1,5 +1,6 @@
 package at.jugger.tracker.config;
 
+import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,9 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -31,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();
 
         if (!csrfEnabled) {
-            http.csrf().disable();
+            http.csrf().disable().cors();
         }
     }
 
@@ -46,5 +50,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .build();
 
         return new InMemoryUserDetailsManager(user);
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        if (!csrfEnabled) {
+            final CorsConfiguration configuration = new CorsConfiguration();
+            configuration.setAllowedOrigins(ImmutableList.of("*"));
+            configuration.setAllowedMethods(ImmutableList.of("HEAD",
+                    "GET", "POST", "PUT", "DELETE", "PATCH"));
+            configuration.setAllowCredentials(true);
+            configuration.setAllowedHeaders(ImmutableList.of("Authorization", "Cache-Control", "Content-Type"));
+
+            source.registerCorsConfiguration("/**", configuration);
+        }
+        return source;
     }
 }
