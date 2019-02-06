@@ -1,9 +1,15 @@
-import {User} from './api'
+import {Training, User} from './api'
 
-export interface RootState{
+export interface RootState {
 
 }
 
 export interface UserState {
-    user: User
+    user: User,
+    users: User[]
+}
+
+export interface TrainingState {
+    trainings: Training[],
+    editTraining: Training
 }
