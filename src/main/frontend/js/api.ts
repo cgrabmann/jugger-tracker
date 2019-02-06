@@ -1,4 +1,4 @@
-import {Configuration, TrainingApi, TrainingApiFactory, UserApi} from 'juggerApi/api'
+import {Configuration, TrainingApi, TrainingApiFactory, UserApi} from 'juggerApi'
 import * as portableFetch from "portable-fetch";
 
 export class UserAPI {

@@ -1,6 +1,6 @@
 import {Module} from 'vuex';
 import {RootState, TrainingState} from './types';
-import {Training, User} from 'juggerApi/api'
+import {Training, User} from 'juggerApi'
 import {TrainingAPI} from '../../api';
 
 const namespaced = true;

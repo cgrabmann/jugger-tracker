@@ -42,7 +42,7 @@
     import {TrainingState} from "../store/types";
     import {Namespace} from "../store/namespace";
     import {Action, State} from "vuex-class";
-    import {Training, User} from "juggerApi/api";
+    import {Training, User} from "juggerApi";
 
     @Component({
         beforeRouteEnter(to, from, next) {
@@ -50,10 +50,6 @@
                 vm.load();
                 next();
             })
-        },
-        beforeRouteUpdate(to, from, next) {
-            this.load();
-            next();
         }
     })
     export default class Trainings extends Vue {
@@ -78,9 +74,19 @@
                     align: 'left',
                     value: 'date'
                 },
-                {text: 'Typ', value: 'type'},
-                {text: 'Teilnehmer', value: 'participants', sortable: false}
-                {text: '', sortable: false}
+                {
+                    text: 'Typ',
+                    value: 'type'
+                },
+                {
+                    text: 'Teilnehmer',
+                    value: 'participants',
+                    sortable: false
+                },
+                {
+                    text: '',
+                    sortable: false
+                }
             ];
         }
 

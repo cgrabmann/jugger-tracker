@@ -65,7 +65,8 @@
     import {Namespace} from "../store/namespace";
     import {TrainingState, UserState} from "../store/types";
     import User from "./User.vue";
-    import {Training} from 'juggerApi/api'
+    import {Training} from 'juggerApi';
+    import moment from 'moment';
 
     @Component({
         beforeRouteEnter(to, from, next) {
@@ -96,18 +97,8 @@
             this.id = id;
             this.getUsers();
             if (id === "new") {
-                Date.prototype.toIsoString = function () {
-                    var pad = function (num) {
-                        var norm = Math.floor(Math.abs(num));
-                        return (norm < 10 ? '0' : '') + norm;
-                    };
-                    return this.getFullYear() +
-                        '-' + pad(this.getMonth() + 1) +
-                        '-' + pad(this.getDate());
-                };
-
                 this.trainingState.editTraining = {
-                    date: new Date().toIsoString(),
+                    date: moment(new Date()).format("YYYY-MM-DD"),
                     type: "klein",
                     participants: []
                 } as Training;
