@@ -8,7 +8,8 @@ const state: UserState = {
     editUser: {
         firstName: null,
         lastName: null,
-        email: null
+        email: null,
+        trackabel: true
     } as User,
     users: [] as Array<User>
 };

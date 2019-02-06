@@ -1,7 +1,7 @@
 <template>
     <v-form>
         <v-toolbar>
-            <v-toolbar-title>Training</v-toolbar-title>
+            <v-toolbar-title>Training Anlegen</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
                 <v-btn depressed
@@ -10,51 +10,62 @@
                 </v-btn>
             </v-toolbar-items>
         </v-toolbar>
-        <v-menu
-                lazy
-                :close-on-content-click="true"
-                transition="scale-transition"
-                full-width
-                :nudge-left="40"
-                max-width="290px"
-        >
-            <v-text-field
-                    slot="activator"
-                    label="Datum"
-                    prepend-icon="event"
-                    :value="training.date"
-                    readonly
-            ></v-text-field>
-            <v-date-picker v-model="training.date"
-                           no-title
-                           autosave>
-            </v-date-picker>
-        </v-menu>
-        <v-select
-                v-model="training.type"
-                :items="trainingTypes"
-                label="Typ"
-        ></v-select>
-        <v-select :items="users"
-                  v-model="training.participants"
-                  item-value="id"
-                  label="Teilnehmer"
-                  multiple
-                  return-object>
-            <template slot="selection" slot-scope="participant">
-                <v-chip
-                        :selected="participant.selected"
-                        :key="participant.id"
-                        close
-                        class="chip--select-multi"
-                        @input="participant.parent.selectItem(participant.item)"
-                >{{ participant.item.firstName }} {{ participant.item.lastName }}
-                </v-chip>
-            </template>
-            <template slot="item" slot-scope="participant">
-                {{ participant.item.firstName }} {{ participant.item.lastName }}
-            </template>
-        </v-select>
+        <v-container fluid>
+            <v-layout column
+                      justify-space-around>
+                <v-flex>
+                    <v-menu
+                            lazy
+                            :close-on-content-click="true"
+                            transition="scale-transition"
+                            full-width
+                            :nudge-left="40"
+                            max-width="290px"
+                    >
+                        <v-text-field
+                                slot="activator"
+                                label="Datum"
+                                prepend-icon="event"
+                                :value="training.date"
+                                readonly
+                        ></v-text-field>
+                        <v-date-picker v-model="training.date"
+                                       no-title
+                                       autosave>
+                        </v-date-picker>
+                    </v-menu>
+                </v-flex>
+                <v-flex>
+                    <v-select
+                            v-model="training.type"
+                            :items="trainingTypes"
+                            label="Typ"
+                    ></v-select>
+                </v-flex>
+                <v-flex>
+                    <v-select :items="users"
+                              v-model="training.participants"
+                              item-value="id"
+                              label="Teilnehmer"
+                              multiple
+                              return-object>
+                        <template slot="selection" slot-scope="participant">
+                            <v-chip
+                                    :selected="participant.selected"
+                                    :key="participant.id"
+                                    close
+                                    class="chip--select-multi"
+                                    @input="participant.parent.selectItem(participant.item)"
+                            >{{ participant.item.firstName }} {{ participant.item.lastName }}
+                            </v-chip>
+                        </template>
+                        <template slot="item" slot-scope="participant">
+                            {{ participant.item.firstName }} {{ participant.item.lastName }}
+                        </template>
+                    </v-select>
+                </v-flex>
+            </v-layout>
+        </v-container>
     </v-form>
 </template>
 

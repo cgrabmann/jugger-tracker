@@ -1,18 +1,20 @@
 <template>
     <div>
         <v-toolbar>
-            <v-toolbar-title>User Anlegen</v-toolbar-title>
+            <v-toolbar-title>Mitglied Anlegen</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
                 <v-btn depressed
                        color="primary"
-                       :disabled="!valid">User speichern
+                       :disabled="!valid"
+                       :loading="saving"
+                       @click="saveUser()">speichern
                 </v-btn>
             </v-toolbar-items>
         </v-toolbar>
         <v-form v-model="valid">
             <v-container fluid>
-                <v-layout row wrap
+                <v-layout column
                           justify-space-around>
                     <v-flex>
                         <v-text-field v-model="user.firstName"
@@ -34,6 +36,12 @@
                                       :rules="emailRules"
                                       label="Email"
                                       required></v-text-field>
+                    </v-flex>
+                    <v-flex>
+                        <v-switch
+                                v-model="user.trackable"
+                                label="Trainingsbeteiligung tracken"
+                                color="primary"></v-switch>
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -64,17 +72,37 @@
     export default class UserComponent extends Vue {
         @State(Namespace.USER.namespace) userState: UserState;
         @Action('getUser', Namespace.USER) getUser;
-        valid = false;
+        @Action('createUser', Namespace.USER) createUser;
+        @Action('updateUser', Namespace.USER) updateUser;
+        valid: boolean = false;
+        id: (string | number) = null;
+        saving: boolean = false;
 
         openNew(id: (string | number)) {
             this.userState.editUser = {
                 firstName: null,
                 lastName: null,
-                email: null
+                email: null,
+                trackable: true
             } as User;
+            this.id = id;
             if (id !== "new") {
-                this.getUser(id)
+                this.getUser(id);
             }
+        }
+
+        saveUser() {
+            this.saving = true;
+            let promise: Promise;
+            if (this.id === 'new') {
+                promise = this.createUser(this.user);
+            } else {
+                promise = this.updateUser(this.user);
+            }
+            promise.then(() => {
+                this.saving = false;
+                this.$router.push('/user')
+            })
         }
 
         get user(): User {

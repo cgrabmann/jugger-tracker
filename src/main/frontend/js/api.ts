@@ -7,7 +7,6 @@ export class UserAPI {
 
     private constructor() {
         UserAPI._instance = this;
-        this.init("http://localhost:8080");
     }
 
     public static get Instance() {
@@ -29,7 +28,6 @@ export class TrainingAPI {
 
     private constructor() {
         TrainingAPI._instance = this;
-        this.init("http://localhost:8080");
     }
 
     public static get Instance() {

@@ -1,12 +1,12 @@
 <template>
     <div>
         <v-toolbar>
-            <v-toolbar-title>Users</v-toolbar-title>
+            <v-toolbar-title>Mitglieder</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
                 <v-btn depressed
                        to="/user/new"
-                       color="primary">User anlegen
+                       color="primary">Mitgleid anlegen
                 </v-btn>
             </v-toolbar-items>
         </v-toolbar>
@@ -23,7 +23,7 @@
 
     @Component
     export default class Users extends Vue {
-        valid = false;
+
     }
 </script>
 
