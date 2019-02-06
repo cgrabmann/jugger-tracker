@@ -1,6 +1,6 @@
 <template>
     <v-form>
-        <v-toolbar>
+        <v-toolbar fixed app>
             <v-toolbar-title>Training Anlegen</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>

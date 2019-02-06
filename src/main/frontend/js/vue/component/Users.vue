@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-toolbar>
+        <v-toolbar fixed app>
             <v-toolbar-title>Mitglieder</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>

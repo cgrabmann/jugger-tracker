@@ -1,13 +1,20 @@
 <template>
     <div>
-        <v-toolbar>
-            <v-toolbar-title v-if="$vuetify.breakpoint.smAndDown">Jugger Vienna</v-toolbar-title>
+        <v-toolbar fixed app>
+            <v-toolbar-title>
+                <template v-if="$vuetify.breakpoint.smAndDown">
+                    Jugger Vienna
+                </template>
+                <template v-else>
+                    Überblick
+                </template>
+            </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
                 <v-btn depressed
                        color="primary"
                        to="/trainings/new">
-                    neues Training anlegen
+                    Training anlegen
                 </v-btn>
             </v-toolbar-items>
         </v-toolbar>
