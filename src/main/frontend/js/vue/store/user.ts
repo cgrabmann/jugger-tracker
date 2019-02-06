@@ -6,7 +6,7 @@ import {UserAPI} from '../../api';
 const namespaced = true;
 const state: UserState = {
     user: {} as User,
-    users: [] as User
+    users: [] as Array<User>
 };
 
 export const UserModule: Module<UserState, RootState> = {
