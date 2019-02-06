@@ -5,7 +5,7 @@ import Overview from '../component/Overview.vue'
 import User from '../component/User.vue'
 import Users from '../component/Users.vue'
 import Trainings from '../component/Trainings.vue'
-import NewTraining from '../component/NewTraining.vue'
+import Training from '../component/Training.vue'
 
 Vue.use(Router);
 Vue.use(VueBreadcrumbs);
@@ -40,8 +40,8 @@ export default new Router({
                 breadcrumb: 'Trainings'
             }
         }, {
-            path: '/trainings/new',
-            component: NewTraining,
+            path: '/trainings/:id',
+            component: Training,
             meta: {
                 breadcrumb: 'New Training'
             }

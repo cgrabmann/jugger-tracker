@@ -7,6 +7,7 @@ export class UserAPI {
 
     private constructor() {
         UserAPI._instance = this;
+        this.init("http://localhost:8080");
     }
 
     public static get Instance() {
@@ -14,7 +15,7 @@ export class UserAPI {
     }
 
     public init(host: string) {
-        this._userAPI = new UserApi(null, host);
+        this._userAPI = new UserApi(null, host, portableFetch.default);
     }
 
     public getUserAPI(): UserApi {
@@ -28,7 +29,6 @@ export class TrainingAPI {
 
     private constructor() {
         TrainingAPI._instance = this;
-        console.log("Constructing TrainingAPI");
         this.init("http://localhost:8080");
     }
 
@@ -41,7 +41,6 @@ export class TrainingAPI {
     }
 
     public getTrainingAPI(): TrainingApi {
-        console.log("returning TrainingAPI");
         return this._trainingAPI;
     }
 }

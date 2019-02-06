@@ -10,17 +10,23 @@
                 </v-btn>
             </v-toolbar-items>
         </v-toolbar>
-        <v-data-table :headers="headers" :items="trainings">
+        <v-data-table :headers="headers"
+                      :items="trainings"
+                      v-bind:pagination.sync="pagination">
             <template slot="items" slot-scope="props">
                 <tr>
                     <td class="text-xs-left">{{props.item.date}}</td>
                     <td class="text-xs-left">{{props.item.type}}</td>
                     <td>({{props.item.participants.length}}) {{participantList(props.item.participants)}}</td>
                     <td class="text-xs-right">
-                        <v-btn v-on:click="openTrainingAction(props.item)">
+                        <v-btn v-on:click="openTrainingAction(props.item)"
+                               fab small depressed
+                               color="primary">
                             <v-icon>edit</v-icon>
                         </v-btn>
-                        <v-btn v-on:click="deleteTrainingAction(props.item)">
+                        <v-btn v-on:click="deleteTrainingAction(props.item)"
+                               fab small depressed
+                               color="secondary">
                             <v-icon>delete</v-icon>
                         </v-btn>
                     </td>
@@ -55,6 +61,16 @@
         @Action('getTrainings', Namespace.TRAINING) getTrainings: any;
         @Action('deleteTraining', Namespace.TRAINING) deleteTraining: any;
 
+        paginationData: null;
+
+        get pagination() {
+            return this.paginationData;
+        }
+
+        set pagination(paginationData) {
+            this.paginationData = paginationData;
+        }
+
         get headers() {
             return [
                 {
@@ -64,6 +80,7 @@
                 },
                 {text: 'Typ', value: 'type'},
                 {text: 'Teilnehmer', value: 'participants', sortable: false}
+                {text: '', sortable: false}
             ];
         }
 
@@ -72,7 +89,6 @@
         }
 
         deleteTrainingAction(training: Training) {
-            console.log(training);
             if (confirm("Training vom " + training.date + " wirklich löschen?")) {
                 this.deleteTraining(training.date).then(() => {
                     this.getTrainings();
@@ -81,8 +97,9 @@
         }
 
         load() {
-            console.log("Loading trainings...");
-            this.getTrainings();
+            this.getTrainings().then(() => {
+                this.paginationData.descending = true;
+            });
         }
 
         get trainings() {
@@ -94,7 +111,7 @@
         }
 
         participantList(participants: User[]) {
-            return participants.map(participant => participant.firstName + " " + participant.lastName).join(', ')
+            return participants.map(participant => participant.firstName).join(', ')
         }
     }
 </script>

@@ -1,6 +1,6 @@
 import {Module} from 'vuex';
 import {RootState, TrainingState} from './types';
-import {Training, User} from './api'
+import {Training, User} from 'juggerApi/api'
 import {TrainingAPI} from '../../api';
 
 const namespaced = true;
@@ -20,11 +20,16 @@ export const TrainingModule: Module<TrainingState, RootState> = {
         createTraining(context, training: Training): any {
             return TrainingAPI.Instance.getTrainingAPI().createTraining(training);
         },
-        updateTraining(context, date: string, training: Training): any {
-            return TrainingAPI.Instance.getTrainingAPI().updateTraining(date, training);
+        updateTraining(context, data: { date: string, training: Training }): any {
+            return TrainingAPI.Instance.getTrainingAPI().updateTraining(data.date, data.training);
         },
         deleteTraining(context, date: string): any {
             return TrainingAPI.Instance.getTrainingAPI().deleteTraining(date);
+        },
+        getTraining(context, date: string): any {
+            return TrainingAPI.Instance.getTrainingAPI().getTraining(date).then((response: Training) => {
+                context.commit('trainingLoaded', response)
+            });
         },
         getTrainings(context): any {
             return TrainingAPI.Instance.getTrainingAPI().getTrainings().then((response: Training[]) => {
@@ -35,6 +40,9 @@ export const TrainingModule: Module<TrainingState, RootState> = {
     mutations: {
         trainingsLoaded(state, trainings: Training[]) {
             state.trainings = trainings;
+        },
+        trainingLoaded(state, training: Training) {
+            state.editTraining = training;
         }
     }
 };
