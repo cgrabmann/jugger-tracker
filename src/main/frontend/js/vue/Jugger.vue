@@ -4,44 +4,40 @@
                       fixed
                       :value="true"
                       app>
-            <v-btn flat
-                   to="/overview">
-                <span>Überblick</span>
-                <v-icon>home</v-icon>
-            </v-btn>
-            <v-btn flat
-                   to="/user">
-                <span>User</span>
-                <v-icon>account_box</v-icon>
-            </v-btn>
+            <template v-for="route in routes">
+                <v-btn depressed
+                       :to="route.route"
+                       color="primary--text">
+                    <span>{{ route.title }}</span>
+                    <v-icon>{{ route.icon }}</v-icon>
+                </v-btn>
+            </template>
         </v-bottom-nav>
         <v-navigation-drawer v-else
                              fixed
                              app
                              permanent>
-            <v-list light dense class="pt-2">
-                <v-list-tile to="/overview">
-                    <v-list-tile-action>
-                        <v-icon>home</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                        <v-list-tile-title>Überblick</v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
-                <v-list-tile to="/user">
-                    <v-list-tile-action>
-                        <v-icon>account_box</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                        <v-list-tile-title>User</v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
+            <v-list dense class="pt-0">
+                <v-toolbar>
+                    <v-toolbar-title>Jugger Vienna</v-toolbar-title>
+                </v-toolbar>
+                <v-spacer class="pt-3"></v-spacer>
+                <template v-for="route in routes">
+                    <v-list-tile :to="route.route">
+                        <v-list-tile-action>
+                            <v-icon>{{ route.icon }}</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>{{ route.title }}</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                </template>
             </v-list>
         </v-navigation-drawer>
         <v-content>
-            <v-container fluid>
-                <router-view/>
-            </v-container>
+            <keep-alive>
+                <router-view></router-view>
+            </keep-alive>
         </v-content>
     </v-app>
 </template>
@@ -51,6 +47,26 @@
 
     @Component
     export default class Jugger extends Vue {
+
+        get routes(): any {
+            return [
+                {
+                    title: 'Überblick',
+                    icon: 'home',
+                    route: '/overview'
+                },
+                {
+                    title: 'Training',
+                    icon: 'format_list_bulleted',
+                    route: '/trainings'
+                },
+                {
+                    title: 'Mitglieder',
+                    icon: 'account_box',
+                    route: '/user'
+                }
+            ]
+        }
 
     }
 </script>

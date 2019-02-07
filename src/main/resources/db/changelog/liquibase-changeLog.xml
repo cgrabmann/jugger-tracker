@@ -50,5 +50,17 @@
             <dropTable tableName="user_participates_training"/>
         </rollback>
     </changeSet>
+    <changeSet id="3" author="Clemens">
+        <addColumn tableName="user">
+            <column name="trackable" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="user">
+                <column name="trackable"/>
+            </dropColumn>
+        </rollback>
+    </changeSet>
 
 </databaseChangeLog>

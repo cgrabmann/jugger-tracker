@@ -2,16 +2,16 @@
   "name": "tracker",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "Clemens Grabmann <Clemens.Grabmann@catalysts.cc>",
+  "author": "Clemens Grabmann",
   "license": "MIT",
   "dependencies": {
+    "moment": "^2.24.0",
     "portable-fetch": "^3.0.0",
     "vue": "^2.5.22",
     "vue-class-component": "^6.3.2",
     "vuetify": "^1.4.4",
     "vuex": "^3.1.0",
-    "vuex-class": "^0.3.1",
-    "moment": "2.24.0"
+    "vuex-class": "^0.3.1"
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "^2.5.2",
