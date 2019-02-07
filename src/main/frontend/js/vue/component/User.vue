@@ -1,16 +1,40 @@
 <template>
-    <div>
-        <v-toolbar fixed app>
+    <v-card id="user">
+        <v-toolbar fixed
+                   app>
             <v-toolbar-title>{{ toolbarTitle }}</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-toolbar-items>
-                <v-btn depressed
+            <v-speed-dial v-model="fab"
+                          :loading="saving"
+                          absolute
+                          bottom
+                          right
+                          direction="bottom"
+                          transition="slide-y-transition">
+                <v-btn v-model="fab"
+                       slot="activator"
                        color="primary"
-                       :disabled="!valid"
-                       :loading="saving"
-                       @click="saveUser()">speichern
+                       dark
+                       fab
+                       class="speed-dial-button">
+                    <v-icon>menu</v-icon>
+                    <v-icon>close</v-icon>
                 </v-btn>
-            </v-toolbar-items>
+                <v-btn fab
+                       dark
+                       small
+                       color="indigo"
+                       @click="saveUser()">
+                    <v-icon>save</v-icon>
+                </v-btn>
+                <v-btn v-if="!!user.id"
+                       fab
+                       dark
+                       small
+                       color="secondary"
+                       @click="removeUser()">
+                    <v-icon>delete</v-icon>
+                </v-btn>
+            </v-speed-dial>
         </v-toolbar>
         <v-form v-model="valid">
             <v-container fluid>
@@ -46,7 +70,7 @@
                 </v-layout>
             </v-container>
         </v-form>
-    </div>
+    </v-card>
 </template>
 
 <script lang="ts">
@@ -84,9 +108,11 @@
         @Action('getUser', Namespace.USER) getUser;
         @Action('createUser', Namespace.USER) createUser;
         @Action('updateUser', Namespace.USER) updateUser;
+        @Action('deleteUser', Namespace.USER) deleteUser;
         valid: boolean = false;
         id: (string | number) = null;
         saving: boolean = false;
+        fab: boolean = false;
 
         openNew(id: (string | number)) {
             this.userState.editUser = {
@@ -110,9 +136,20 @@
                 promise = this.updateUser(this.user);
             }
             promise.then(() => {
-                this.saving = false;
                 this.$router.push('/user')
+            }).finally(() => {
+                this.saving = false;
             })
+        }
+
+        removeUser() {
+            this.saving = true;
+            this.deleteUser(this.user.id)
+                .then(() => {
+                    this.$router.push('/user')
+                }).finally(() => {
+                    this.saving = false;
+                })
         }
 
         get toolbarTitle(): string {
@@ -148,6 +185,5 @@
     }
 </script>
 
-<style scoped>
-
+<style lang="less">
 </style>
