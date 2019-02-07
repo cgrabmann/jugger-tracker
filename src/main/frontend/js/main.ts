@@ -28,7 +28,7 @@ new Vue({
     router,
     data: {},
     beforeMount() {
-        let host: string = null;
+        let host: string = undefined;
         if (process.env.NODE_ENV === 'development') {
             host = 'http://localhost:8080'
         }

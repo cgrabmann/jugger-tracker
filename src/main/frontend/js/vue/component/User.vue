@@ -59,14 +59,24 @@
 
     @Component({
         beforeRouteEnter(to, from, next) {
-            next(vm => {
-                vm.openNew(to.params.id);
-                next();
-            })
+            const id = to.params.id;
+            if (isNaN(Number(id)) && id !== 'new') {
+                next({path: '/error'});
+            } else {
+                next(vm => {
+                    vm.openNew(to.params.id);
+                    next();
+                });
+            }
         },
         beforeRouteUpdate(to, from, next) {
-            this.openNew(to.params.id);
-            next();
+            const id = to.params.id;
+            if (isNaN(Number(id)) && id !== 'new') {
+                next({path: '/error'});
+            } else {
+                this.openNew(to.params.id);
+                next();
+            }
         }
     })
     export default class UserComponent extends Vue {

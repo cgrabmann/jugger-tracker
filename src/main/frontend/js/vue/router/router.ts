@@ -6,6 +6,7 @@ import User from '../component/User.vue'
 import Users from '../component/Users.vue'
 import Trainings from '../component/Trainings.vue'
 import Training from '../component/Training.vue'
+import Error from '../component/Error.vue'
 
 Vue.use(Router);
 Vue.use(VueBreadcrumbs);
@@ -45,6 +46,15 @@ export default new Router({
             meta: {
                 breadcrumb: 'New Training'
             }
+        }, {
+            path: '/error',
+            component: Error,
+            meta: {
+                breadcrumb: 'Error'
+            }
+        }, {
+            path: '*',
+            redirect: '/error'
         }
     ]
 });
