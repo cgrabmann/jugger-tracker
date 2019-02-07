@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-toolbar fixed app>
-            <v-toolbar-title>Mitglied Anlegen</v-toolbar-title>
+            <v-toolbar-title>{{ toolbarTitle }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
                 <v-btn depressed
@@ -103,6 +103,10 @@
                 this.saving = false;
                 this.$router.push('/user')
             })
+        }
+
+        get toolbarTitle(): string {
+            return 'Mitglied ' + (this.id === 'new' ? 'Anlegen' : 'Bearbeiten');
         }
 
         get user(): User {

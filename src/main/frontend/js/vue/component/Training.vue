@@ -1,7 +1,7 @@
 <template>
     <v-form>
         <v-toolbar fixed app>
-            <v-toolbar-title>Training Anlegen</v-toolbar-title>
+            <v-toolbar-title>{{ toolbarTitle }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
                 <v-btn depressed
@@ -99,10 +99,10 @@
         @Action('updateTraining', Namespace.TRAINING) updateTraining;
         @Action('getTraining', Namespace.TRAINING) getTraining;
 
-        date = null;
-        menu = false;
-        modal = false;
-        id;
+        date: string = null;
+        menu: boolean = false;
+        modal: boolean = false;
+        id: (string | number) = null;
 
         openNew(id: (string | number)) {
             this.id = id;
@@ -126,6 +126,10 @@
             } else {
                 this.updateTraining({date: this.id, training: this.trainingState.editTraining})
             }
+        }
+
+        get toolbarTitle(): string {
+            return 'Training ' + (this.id === 'new' ? 'Anlegen' : 'Bearbeiten');
         }
 
         get trainingTypes(): string[] {
