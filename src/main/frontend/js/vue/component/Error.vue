@@ -14,8 +14,7 @@
             </v-toolbar-items>
         </v-toolbar>
         <v-container fluid>
-            <v-layout column
-                      justify-space-around>
+            <v-layout column>
                 <v-flex>
                     <p>Unsere Kette ist leider gewickelt. Deshalb konnten wir deine gewünschte Seite nicht rechtzeitig abschlagen.</p>
                 </v-flex>

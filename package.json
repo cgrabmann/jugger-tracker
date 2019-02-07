@@ -28,8 +28,7 @@
     "vue2-breadcrumbs": "^2.0.0"
   },
   "alias": {
-    "juggerApi": "./build/generated/openApi/ts/index.ts",
-    "@/*": "./src/main/frontend/*"
+    "juggerApi": "./build/generated/openApi/ts/index.ts"
   },
   "scripts": {
     "dev": "parcel watch src/main/frontend/index.html -d build/generated/frontend/vue/static",
