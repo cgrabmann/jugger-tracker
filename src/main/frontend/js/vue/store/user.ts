@@ -24,7 +24,7 @@ export const UserModule: Module<UserState, RootState> = {
         },
         updateUser(context, user: User): any {
             return UserAPI.Instance.getUserAPI().updateUser(user.id, user)
-                .then((response: User) => context.commit('userLoaded', response));
+                .then(() => context.dispatch('getUsers'));
         },
         getUsers(context): any {
             return UserAPI.Instance.getUserAPI().getUsers()
@@ -36,9 +36,7 @@ export const UserModule: Module<UserState, RootState> = {
         },
         deleteUser(context, id:number): any {
             return UserAPI.Instance.getUserAPI().deleteUser(id)
-                .then(() => {
-                    context.dispatch('getUsers');
-                });
+                .then(() => context.dispatch('getUsers'));
         }
     },
     mutations: {

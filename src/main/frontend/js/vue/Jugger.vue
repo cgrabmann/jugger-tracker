@@ -78,6 +78,12 @@
         bottom: 0;
     }
 
+    .v-btn--floating.v-btn--router {
+        .v-icon {
+            display: inherit;
+        }
+    }
+
     .speed-dial-button {
         .v-btn__content {
             height: 25px;

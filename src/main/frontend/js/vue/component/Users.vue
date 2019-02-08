@@ -7,8 +7,8 @@
                    absolute
                    right
                    bottom
-                   color="primary"
-                   @click="newUser()">
+                   to="/user/new"
+                   color="primary">
                 <v-icon>add</v-icon>
             </v-btn>
         </v-toolbar>
@@ -75,10 +75,6 @@
 
         beforeMount() {
             this.getUsers();
-        }
-
-        newUser() {
-            this.$router.push('/user/new')
         }
 
         get users() {

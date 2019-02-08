@@ -11,9 +11,9 @@ public interface TrainingService {
 
     @NotNull Training getTraining(@NotNull LocalDate date);
 
-    void createTraining(@NotNull Training training);
+    @NotNull Training createTraining(@NotNull Training training);
 
-    void updateTraining(@NotNull LocalDate date, @NotNull Training training);
+    @NotNull Training updateTraining(@NotNull LocalDate date, @NotNull Training training);
 
     void deleteTraining(@NotNull LocalDate date);
 }

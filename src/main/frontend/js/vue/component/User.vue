@@ -3,14 +3,25 @@
         <v-toolbar fixed
                    app>
             <v-toolbar-title>{{ toolbarTitle }}</v-toolbar-title>
-            <v-speed-dial v-model="fab"
-                          :loading="saving"
+            <v-btn v-if="id === 'new'"
+                   fab
+                   dark
+                   absolute
+                   right
+                   bottom
+                   color="indigo"
+                   @click="saveUser()">
+                <v-icon>save</v-icon>
+            </v-btn>
+            <v-speed-dial v-else
+                          v-model="fab"
                           absolute
                           bottom
                           right
                           direction="bottom"
                           transition="slide-y-transition">
                 <v-btn v-model="fab"
+                       :loading="saving"
                        slot="activator"
                        color="primary"
                        dark
@@ -79,7 +90,7 @@
     import {Action, State} from 'vuex-class';
     import {Namespace} from '../store/namespace';
     import {UserState} from '../store/types';
-    import {User} from './api'
+    import {User} from 'juggerApi'
 
     @Component({
         beforeRouteEnter(to, from, next) {
@@ -128,6 +139,7 @@
         }
 
         saveUser() {
+            this.fab = false;
             this.saving = true;
             let promise: Promise;
             if (this.id === 'new') {
@@ -143,13 +155,17 @@
         }
 
         removeUser() {
-            this.saving = true;
-            this.deleteUser(this.user.id)
-                .then(() => {
-                    this.$router.push('/user')
-                }).finally(() => {
-                    this.saving = false;
-                })
+            this.fab = false;
+            if (confirm('Mitglied "' + this.user.firstName + ' ' + this.user.lastName + '" wirklich löschen?')) {
+                this.saving = true;
+                this.deleteUser(this.user.id)
+                    .then(() => {
+                        this.$router.push('/user')
+                    })
+                    .finally(() => {
+                        this.saving = false;
+                    });
+            }
         }
 
         get toolbarTitle(): string {

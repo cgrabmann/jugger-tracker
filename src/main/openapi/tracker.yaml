@@ -6,7 +6,6 @@ info:
 
 servers:
   - url: 'https://jugger.derletztedodo.at'
-  - url: 'http://localhost:8080'
 
 paths:
   /api/users:
@@ -137,6 +136,10 @@ paths:
       responses:
         200:
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Training'
 
   /api/trainings/{date}:
     get:
@@ -180,6 +183,10 @@ paths:
       responses:
         200:
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Training'
     delete:
       tags:
         - Training

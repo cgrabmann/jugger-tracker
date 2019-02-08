@@ -35,20 +35,20 @@ public class TrainingServiceImpl implements TrainingService {
     }
 
     @Override
-    public void createTraining(@NotNull Training training) {
+    public @NotNull Training createTraining(@NotNull Training training) {
         TrainingEntity trainingEntity = trainingMapper.toEntity(training);
-        trainingRepository.save(trainingEntity);
+        return trainingMapper.toDto(trainingRepository.save(trainingEntity));
     }
 
     @Override
-    public void updateTraining(@NotNull LocalDate date, @NotNull Training training) {
+    public @NotNull Training updateTraining(@NotNull LocalDate date, @NotNull Training training) {
         TrainingEntity trainingEntity = Objects.requireNonNull(
                 trainingRepository.findByDate(date),
                 "Training with date '" + date + "' not fund."
         );
 
         trainingEntity = trainingMapper.toEntity(training, trainingEntity);
-        trainingRepository.save(trainingEntity);
+        return trainingMapper.toDto(trainingRepository.save(trainingEntity));
     }
 
     @Override
