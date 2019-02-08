@@ -19,9 +19,8 @@ public class TrainingController implements TrainingApiDelegate {
     }
 
     @Override
-    public ResponseEntity<Void> createTraining(@NotNull Training training) {
-        trainingService.createTraining(training);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Training> createTraining(@NotNull Training training) {
+        return ResponseEntity.ok(trainingService.createTraining(training));
     }
 
     @Override
@@ -41,8 +40,7 @@ public class TrainingController implements TrainingApiDelegate {
     }
 
     @Override
-    public ResponseEntity<Void> updateTraining(@NotNull LocalDate date, @NotNull Training training) {
-        trainingService.updateTraining(date, training);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Training> updateTraining(@NotNull LocalDate date, @NotNull Training training) {
+        return ResponseEntity.ok(trainingService.updateTraining(date, training));
     }
 }

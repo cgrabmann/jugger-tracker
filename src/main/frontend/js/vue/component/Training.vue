@@ -1,72 +1,112 @@
 <template>
-    <v-form>
-        <v-toolbar fixed app>
+    <v-card>
+        <v-toolbar fixed
+                   app>
             <v-toolbar-title>{{ toolbarTitle }}</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-toolbar-items>
-                <v-btn depressed
+            <v-btn v-if="id === 'new'"
+                   fab
+                   dark
+                   absolute
+                   right
+                   bottom
+                   color="indigo"
+                   @click="saveTraining()">
+                <v-icon>save</v-icon>
+            </v-btn>
+            <v-speed-dial v-else
+                          v-model="fab"
+                          absolute
+                          bottom
+                          right
+                          direction="bottom"
+                          transition="slide-y-transition">
+                <v-btn v-model="fab"
+                       :loading="saving"
+                       slot="activator"
                        color="primary"
-                       v-on:click="save">Speichern
+                       dark
+                       fab
+                       class="speed-dial-button">
+                    <v-icon>menu</v-icon>
+                    <v-icon>close</v-icon>
                 </v-btn>
-            </v-toolbar-items>
+                <v-btn fab
+                       dark
+                       small
+                       color="indigo"
+                       @click="saveTraining()">
+                    <v-icon>save</v-icon>
+                </v-btn>
+                <v-btn v-if="id !== 'new'"
+                       fab
+                       dark
+                       small
+                       color="secondary"
+                       @click="removeTraining()">
+                    <v-icon>delete</v-icon>
+                </v-btn>
+            </v-speed-dial>
         </v-toolbar>
-        <v-container fluid>
-            <v-layout column
-                      justify-space-around>
-                <v-flex>
-                    <v-menu
-                            lazy
-                            :close-on-content-click="true"
-                            transition="scale-transition"
-                            full-width
-                            :nudge-left="40"
-                            max-width="290px"
-                    >
-                        <v-text-field
-                                slot="activator"
-                                label="Datum"
-                                prepend-icon="event"
-                                :value="training.date"
-                                readonly
-                        ></v-text-field>
-                        <v-date-picker v-model="training.date"
-                                       no-title
-                                       autosave>
-                        </v-date-picker>
-                    </v-menu>
-                </v-flex>
-                <v-flex>
-                    <v-select
-                            v-model="training.type"
-                            :items="trainingTypes"
-                            label="Typ"
-                    ></v-select>
-                </v-flex>
-                <v-flex>
-                    <v-select :items="users"
-                              v-model="training.participants"
-                              item-value="id"
-                              label="Teilnehmer"
-                              multiple
-                              return-object>
-                        <template slot="selection" slot-scope="participant">
-                            <v-chip
-                                    :selected="participant.selected"
-                                    :key="participant.id"
-                                    close
-                                    class="chip--select-multi"
-                                    @input="participant.parent.selectItem(participant.item)"
-                            >{{ participant.item.firstName }} {{ participant.item.lastName }}
-                            </v-chip>
-                        </template>
-                        <template slot="item" slot-scope="participant">
-                            {{ participant.item.firstName }} {{ participant.item.lastName }}
-                        </template>
-                    </v-select>
-                </v-flex>
-            </v-layout>
-        </v-container>
-    </v-form>
+        <v-form>
+            <v-container fluid>
+                <v-layout column
+                          justify-space-around>
+                    <v-flex>
+                        <v-menu
+                                lazy
+                                :close-on-content-click="true"
+                                transition="scale-transition"
+                                full-width
+                                :nudge-left="40"
+                                max-width="290px">
+                            <v-text-field
+                                    slot="activator"
+                                    label="Datum"
+                                    prepend-icon="event"
+                                    :value="training.date"
+                                    readonly
+                            ></v-text-field>
+                            <v-date-picker v-model="training.date"
+                                           no-title
+                                           autosave>
+                            </v-date-picker>
+                        </v-menu>
+                    </v-flex>
+                    <v-flex>
+                        <v-select
+                                v-model="training.type"
+                                :items="trainingTypes"
+                                label="Typ"
+                        ></v-select>
+                    </v-flex>
+                    <v-flex>
+                        <v-select :items="users"
+                                  v-model="training.participants"
+                                  item-value="id"
+                                  label="Teilnehmer"
+                                  multiple
+                                  return-object>
+                            <template slot="selection"
+                                      slot-scope="participant">
+                                <v-chip
+                                        :selected="participant.selected"
+                                        :key="participant.id"
+                                        close
+                                        class="chip--select-multi"
+                                        @input="participant.parent.selectItem(participant.item)"
+                                >{{ participant.item.firstName }} {{ participant.item.lastName }}
+                                </v-chip>
+                            </template>
+                            <template slot="item"
+                                      slot-scope="participant">
+                                {{ participant.item.firstName }} {{ participant.item.lastName }}
+                            </template>
+                        </v-select>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </v-form>
+    </v-card>
 </template>
 
 <script lang="ts">
@@ -82,7 +122,7 @@
     @Component({
         beforeRouteEnter(to, from, next) {
             const id = to.params.id;
-            if (isNaN(Number(id)) && id !== 'new') {
+            if (!moment(id, 'YYYY-MM-DD', true).isValid() && id !== 'new') {
                 next({path: '/error'});
             } else {
                 next(vm => {
@@ -108,11 +148,14 @@
         @Action('createTraining', Namespace.TRAINING) createTraining;
         @Action('updateTraining', Namespace.TRAINING) updateTraining;
         @Action('getTraining', Namespace.TRAINING) getTraining;
+        @Action('deleteTraining', Namespace.TRAINING) deleteTraining;
 
         date: string = null;
         menu: boolean = false;
         modal: boolean = false;
         id: (string | number) = null;
+        fab: boolean = false;
+        saving: boolean = false;
 
         openNew(id: (string | number)) {
             this.id = id;
@@ -130,11 +173,34 @@
             }
         }
 
-        save() {
+        saveTraining() {
+            this.fab = false;
+            this.saving = true;
+            let promise: Promise;
             if (this.id === "new") {
-                this.createTraining(this.trainingState.editTraining)
+                promise = this.createTraining(this.trainingState.editTraining)
             } else {
-                this.updateTraining({date: this.id, training: this.trainingState.editTraining})
+                promise = this.updateTraining({date: this.id, training: this.trainingState.editTraining})
+            }
+            promise.then(() => {
+                    this.$router.push('/trainings');
+                })
+                .finally(() => {
+                    this.saving = false;
+                })
+        }
+
+        removeTraining() {
+            this.fab = false;
+            if (confirm("Training vom " + this.id + " wirklich löschen?")) {
+                this.saving = true;
+                this.deleteTraining(this.id)
+                    .then(() => {
+                        this.$router.push('/trainings')
+                    })
+                    .finally(() => {
+                        this.saving = false;
+                    });
             }
         }
 

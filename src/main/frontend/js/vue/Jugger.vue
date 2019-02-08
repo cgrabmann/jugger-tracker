@@ -17,7 +17,8 @@
                              fixed
                              app
                              permanent>
-            <v-list dense class="pt-0">
+            <v-list dense
+                    class="pt-0">
                 <v-toolbar>
                     <v-toolbar-title>Jugger Vienna</v-toolbar-title>
                 </v-toolbar>
@@ -41,6 +42,7 @@
         </v-content>
     </v-app>
 </template>
+
 <script lang="ts">
     import Vue from 'vue';
     import Component from 'vue-class-component';
@@ -70,3 +72,21 @@
 
     }
 </script>
+
+<style lang="less">
+    .v-speed-dial--bottom.v-speed-dial--absolute {
+        bottom: 0;
+    }
+
+    .v-btn--floating.v-btn--router {
+        .v-icon {
+            display: inherit;
+        }
+    }
+
+    .speed-dial-button {
+        .v-btn__content {
+            height: 25px;
+        }
+    }
+</style>

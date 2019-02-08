@@ -1,47 +1,46 @@
 <template>
-    <div>
+    <v-card>
         <v-toolbar fixed app>
             <v-toolbar-title>Trainings</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-toolbar-items>
-                <v-btn depressed
-                       color="primary"
-                       to="/trainings/new">Training anlegen
-                </v-btn>
-            </v-toolbar-items>
+            <v-btn fab
+                   dark
+                   absolute
+                   right
+                   bottom
+                   to="/trainings/new"
+                   color="primary">
+                <v-icon>add</v-icon>
+            </v-btn>
         </v-toolbar>
         <v-container fluid>
             <v-layout column
                       justify-space-around>
                 <v-flex>
                     <v-data-table :headers="headers"
-                                  :items="trainings"
-                                  v-bind:pagination.sync="pagination"
-                                  class="elevation-1">
+                                  :items="trainings">
                         <template slot="items" slot-scope="props">
-                            <tr>
-                                <td class="text-xs-left">{{props.item.date}}</td>
-                                <td class="text-xs-left">{{props.item.type}}</td>
-                                <td>({{props.item.participants.length}}) {{participantList(props.item.participants)}}</td>
-                                <td class="text-xs-right">
-                                    <v-btn v-on:click="openTrainingAction(props.item)"
-                                           fab small depressed
-                                           color="primary">
-                                        <v-icon>edit</v-icon>
-                                    </v-btn>
-                                    <v-btn v-on:click="deleteTrainingAction(props.item)"
-                                           fab small depressed
-                                           color="secondary">
-                                        <v-icon>delete</v-icon>
-                                    </v-btn>
+                            <tr @click="openTrainingAction(props.item)">
+                                <td class="text-xs-center">{{props.item.date}}</td>
+                                <td>
+                                    <template v-if="props.item.type === trainingType.Klein">
+                                        <v-icon color="indigo">arrow_drop_down</v-icon>
+                                    </template>
+                                    <template v-else-if="props.item.type === trainingType.Gro">
+                                        <v-icon color="green">arrow_drop_up</v-icon>
+                                    </template>
+                                    <template v-else>
+                                        <v-icon color="yellow">star</v-icon>
+                                    </template>
                                 </td>
+                                <td>({{props.item.participants.length}})</td>
+                                <td><v-icon>open_in_new</v-icon></td>
                             </tr>
                         </template>
                     </v-data-table>
                 </v-flex>
             </v-layout>
         </v-container>
-    </div>
+    </v-card>
 </template>
 
 <script lang="ts">
@@ -52,47 +51,35 @@
     import {Action, State} from "vuex-class";
     import {Training, User} from "juggerApi";
 
-    @Component({
-        beforeRouteEnter(to, from, next) {
-            next(vm => {
-                vm.load();
-                next();
-            })
-        }
-    })
+    @Component
     export default class Trainings extends Vue {
         @State(Namespace.TRAINING.namespace) trainingState: TrainingState;
         @Action('getTrainings', Namespace.TRAINING) getTrainings: any;
         @Action('deleteTraining', Namespace.TRAINING) deleteTraining: any;
 
-        paginationData: null;
-
-        get pagination() {
-            return this.paginationData;
-        }
-
-        set pagination(paginationData) {
-            this.paginationData = paginationData;
-        }
-
         get headers() {
             return [
                 {
                     text: 'Datum',
-                    align: 'left',
+                    align: 'center',
                     value: 'date'
                 },
                 {
                     text: 'Typ',
-                    value: 'type'
-                },
-                {
-                    text: 'Teilnehmer',
-                    value: 'participants',
+                    value: 'type',
+                    align: 'center',
+                    width: '1px',
                     sortable: false
                 },
                 {
                     text: '',
+                    value: 'participants',
+                    width: '1px',
+                    sortable: false
+                },
+                {
+                    text: '',
+                    width: '1px',
                     sortable: false
                 }
             ];
@@ -102,30 +89,16 @@
             this.$router.push("/trainings/" + training.date);
         }
 
-        deleteTrainingAction(training: Training) {
-            if (confirm("Training vom " + training.date + " wirklich löschen?")) {
-                this.deleteTraining(training.date).then(() => {
-                    this.getTrainings();
-                });
-            }
+        beforeMount() {
+            this.getTrainings();
         }
 
-        load() {
-            this.getTrainings().then(() => {
-                this.paginationData.descending = true;
-            });
+        get trainingType(): Training.TypeEnum {
+            return Training.TypeEnum
         }
 
         get trainings() {
             return this.trainingState.trainings;
-        }
-
-        get numTrainings() {
-            return this.trainingState.trainings.length
-        }
-
-        participantList(participants: User[]) {
-            return participants.map(participant => participant.firstName).join(', ')
         }
     }
 </script>

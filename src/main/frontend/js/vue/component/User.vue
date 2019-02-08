@@ -1,16 +1,51 @@
 <template>
-    <div>
-        <v-toolbar fixed app>
+    <v-card id="user">
+        <v-toolbar fixed
+                   app>
             <v-toolbar-title>{{ toolbarTitle }}</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-toolbar-items>
-                <v-btn depressed
-                       color="primary"
-                       :disabled="!valid"
+            <v-btn v-if="id === 'new'"
+                   fab
+                   dark
+                   absolute
+                   right
+                   bottom
+                   color="indigo"
+                   @click="saveUser()">
+                <v-icon>save</v-icon>
+            </v-btn>
+            <v-speed-dial v-else
+                          v-model="fab"
+                          absolute
+                          bottom
+                          right
+                          direction="bottom"
+                          transition="slide-y-transition">
+                <v-btn v-model="fab"
                        :loading="saving"
-                       @click="saveUser()">speichern
+                       slot="activator"
+                       color="primary"
+                       dark
+                       fab
+                       class="speed-dial-button">
+                    <v-icon>menu</v-icon>
+                    <v-icon>close</v-icon>
                 </v-btn>
-            </v-toolbar-items>
+                <v-btn fab
+                       dark
+                       small
+                       color="indigo"
+                       @click="saveUser()">
+                    <v-icon>save</v-icon>
+                </v-btn>
+                <v-btn v-if="!!user.id"
+                       fab
+                       dark
+                       small
+                       color="secondary"
+                       @click="removeUser()">
+                    <v-icon>delete</v-icon>
+                </v-btn>
+            </v-speed-dial>
         </v-toolbar>
         <v-form v-model="valid">
             <v-container fluid>
@@ -46,7 +81,7 @@
                 </v-layout>
             </v-container>
         </v-form>
-    </div>
+    </v-card>
 </template>
 
 <script lang="ts">
@@ -55,7 +90,7 @@
     import {Action, State} from 'vuex-class';
     import {Namespace} from '../store/namespace';
     import {UserState} from '../store/types';
-    import {User} from './api'
+    import {User} from 'juggerApi'
 
     @Component({
         beforeRouteEnter(to, from, next) {
@@ -84,9 +119,11 @@
         @Action('getUser', Namespace.USER) getUser;
         @Action('createUser', Namespace.USER) createUser;
         @Action('updateUser', Namespace.USER) updateUser;
+        @Action('deleteUser', Namespace.USER) deleteUser;
         valid: boolean = false;
         id: (string | number) = null;
         saving: boolean = false;
+        fab: boolean = false;
 
         openNew(id: (string | number)) {
             this.userState.editUser = {
@@ -102,6 +139,7 @@
         }
 
         saveUser() {
+            this.fab = false;
             this.saving = true;
             let promise: Promise;
             if (this.id === 'new') {
@@ -110,9 +148,24 @@
                 promise = this.updateUser(this.user);
             }
             promise.then(() => {
-                this.saving = false;
                 this.$router.push('/user')
+            }).finally(() => {
+                this.saving = false;
             })
+        }
+
+        removeUser() {
+            this.fab = false;
+            if (confirm('Mitglied "' + this.user.firstName + ' ' + this.user.lastName + '" wirklich löschen?')) {
+                this.saving = true;
+                this.deleteUser(this.user.id)
+                    .then(() => {
+                        this.$router.push('/user')
+                    })
+                    .finally(() => {
+                        this.saving = false;
+                    });
+            }
         }
 
         get toolbarTitle(): string {
@@ -148,6 +201,5 @@
     }
 </script>
 
-<style scoped>
-
+<style lang="less">
 </style>
