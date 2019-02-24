@@ -10,6 +10,11 @@ import at.jugger.tracker.mapper.UserMapper;
 import at.jugger.tracker.repository.LoginTokenRepository;
 import at.jugger.tracker.service.AuthenticationService;
 import at.jugger.tracker.service.dto.LoginToken;
+import at.jugger.tracker.service.exceptions.NoTokenException;
+import at.jugger.tracker.service.exceptions.TokenAlreadyUsedException;
+import at.jugger.tracker.service.exceptions.TokenExpiredException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -64,13 +69,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             case EXPIRED:
                 throw new TokenExpiredException(loginTokenMapper.toDto(loginToken));
             case VALID:
-                createSession();
+                createSession(userMapper.toDto(loginToken.getUser()));
                 useToken(loginToken);
         }
     }
 
-    private void createSession() {
-        // TODO Implement me
+    private void createSession(User user) {
+        UsernamePasswordAuthenticationToken springToken = new UsernamePasswordAuthenticationToken(user.getEmail(), "");
+        springToken.setDetails(user);
+        SecurityContextHolder.getContext().setAuthentication(springToken);
     }
 
     private void useToken(LoginTokenEntity loginTokenEntity) {
