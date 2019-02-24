@@ -28,7 +28,7 @@ public class AuthenticationController implements AuthenticationApiDelegate {
     @Override
     public ResponseEntity<Void> authenticate(String tokenId) {
         authenticationService.authenticate(tokenId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.FOUND).header("Location", "/").build();
     }
 
     @Override
