@@ -3,10 +3,7 @@ package at.jugger.tracker.mapper;
 import at.jugger.tracker.config.MapperConfig;
 import at.jugger.tracker.domain.TrainingEntity;
 import at.jugger.tracker.dto.Training;
-import org.mapstruct.InheritConfiguration;
-import org.mapstruct.InheritInverseConfiguration;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -18,8 +15,14 @@ public interface TrainingMapper {
     List<Training> toDtos(List<TrainingEntity> entities);
 
     @InheritInverseConfiguration
+    @Mappings(
+            @Mapping(target = "trainingId", ignore = true)
+    )
     TrainingEntity toEntity(Training training, @MappingTarget TrainingEntity entity);
 
     @InheritConfiguration
+    @Mappings(
+            @Mapping(target = "trainingId", ignore = true)
+    )
     TrainingEntity toEntity(Training training);
 }
