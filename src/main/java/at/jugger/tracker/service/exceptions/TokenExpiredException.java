@@ -1,14 +1,14 @@
 package at.jugger.tracker.service.exceptions;
 
-import at.jugger.tracker.domain.LoginTokenEntity;
+import at.jugger.tracker.service.dto.LoginToken;
 import lombok.Getter;
 
 public class TokenExpiredException extends Exception {
     @Getter
-    private final LoginTokenEntity loginTokenEntity;
+    private final LoginToken loginToken;
 
-    public TokenExpiredException(LoginTokenEntity loginTokenEntity) {
+    public TokenExpiredException(LoginToken loginToken) {
         super();
-        this.loginTokenEntity = loginTokenEntity;
+        this.loginToken = loginToken;
     }
 }

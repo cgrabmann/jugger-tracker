@@ -3,6 +3,7 @@ package at.jugger.tracker.service.impl;
 import at.jugger.tracker.service.EmailService;
 import at.jugger.tracker.service.TemplateService;
 import at.jugger.tracker.service.dto.LoginToken;
+import at.jugger.tracker.service.exceptions.UnableToSendAuthenticationEmailException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -36,7 +37,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendAuthenticationEmail(LoginToken loginToken, String authenticationUrl) {
+    public void sendAuthenticationEmail(LoginToken loginToken, String authenticationUrl) throws UnableToSendAuthenticationEmailException {
         try {
             MimeMessage message = emailSender.createMimeMessage();
 
@@ -50,7 +51,7 @@ public class EmailServiceImpl implements EmailService {
 
             emailSender.send(message);
         } catch (MessagingException e) {
-            e.printStackTrace();
+            throw new UnableToSendAuthenticationEmailException(e);
         }
     }
 }

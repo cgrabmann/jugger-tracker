@@ -53,16 +53,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public void authenticate(String tokenId) throws NoTokenException, TokenAlreadyUsedException, TokenExpiredException {
-        LoginTokenEntity loginToken = loginTokenRepository.findByTokenId(tokenId);
+        LoginTokenEntity loginToken = loginTokenRepository.findByToken(tokenId);
         TokenState tokenState = getTokenState(loginToken);
 
         switch (tokenState) {
             case NO_TOKEN:
                 throw new NoTokenException();
             case USED:
-                throw new TokenAlreadyUsedException(loginToken);
+                throw new TokenAlreadyUsedException(loginTokenMapper.toDto(loginToken));
             case EXPIRED:
-                throw new TokenExpiredException(loginToken);
+                throw new TokenExpiredException(loginTokenMapper.toDto(loginToken));
             case VALID:
                 createSession();
                 useToken(loginToken);

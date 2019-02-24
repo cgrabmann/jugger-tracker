@@ -2,6 +2,7 @@ package at.jugger.tracker.service.impl;
 
 import at.jugger.tracker.service.TemplateService;
 import at.jugger.tracker.service.dto.LoginToken;
+import at.jugger.tracker.service.exceptions.UnableToSendAuthenticationEmailException;
 import at.jugger.tracker.service.impl.template.AuthenticationEmailData;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
@@ -20,7 +21,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public String getAuthenticationEmailService(LoginToken loginToken, String authenticationUrl) {
+    public String getAuthenticationEmailService(LoginToken loginToken, String authenticationUrl) throws UnableToSendAuthenticationEmailException {
         Mustache mustache = loadTemplate("email/authentication");
 
         AuthenticationEmailData authenticationEmailData = new AuthenticationEmailData();
@@ -32,7 +33,7 @@ public class TemplateServiceImpl implements TemplateService {
         try {
             mustache.execute(writer, authenticationEmailData).flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new UnableToSendAuthenticationEmailException(e);
         }
         return writer.toString();
     }
