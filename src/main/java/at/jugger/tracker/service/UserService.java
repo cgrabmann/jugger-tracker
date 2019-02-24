@@ -9,6 +9,8 @@ import java.util.List;
 public interface UserService {
     User getUser(@NotNull Long id);
 
+    User getUserByEmail(@NotNull String email);
+
     @NotNull List<User> getUsers();
 
     @NotNull User createUser(@NotNull UserData newUser);

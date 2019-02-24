@@ -60,6 +60,8 @@ dependencies {
     // Lombok
     compileOnly 'org.projectlombok:lombok:1.16.20'
     annotationProcessor 'org.projectlombok:lombok:1.16.20'
+
+    compile 'com.github.spullara.mustache.java:compiler:0.9.6'
 }
 
 remotes {

@@ -74,5 +74,28 @@
             </dropColumn>
         </rollback>
     </changeSet>
+    <changeSet id="5" author="Dodo">
+        <createTable tableName="login_token">
+            <column name="token_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false" unique="true" foreignKeyName="fk_login_token_user"
+                             references="user(user_id)"/>
+            </column>
+            <column name="token" type="char(36)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="expiry_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="used" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="login_token"/>
+        </rollback>
+    </changeSet>
 
 </databaseChangeLog>

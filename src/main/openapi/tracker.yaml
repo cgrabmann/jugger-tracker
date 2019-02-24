@@ -64,6 +64,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+
     post:
       tags:
         - User
@@ -90,6 +91,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+
     delete:
       tags:
         - User
@@ -103,6 +105,41 @@ paths:
             type: integer
             format: int64
           description: user ID
+      responses:
+        200:
+          description: OK
+
+
+  /api/authentication/requestToken:
+    post:
+      tags:
+        - Authentication
+      summary: Creates a new login token and send it by email
+      operationId: requestLoginToken
+      requestBody:
+        description: Email address of the user that wants to login
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+      responses:
+        200:
+          description: OK
+
+  /api/authentication/{tokenId}:
+    get:
+      tags:
+        - Authentication
+      summary: Authenticates by using a login token
+      operationId: authenticate
+      parameters:
+        - in: path
+          name: tokenId
+          required: true
+          schema:
+            type: string
+          description: token ID
       responses:
         200:
           description: OK
