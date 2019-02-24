@@ -32,7 +32,7 @@
     "juggerApi": "./build/generated/openApi/ts/index.ts"
   },
   "scripts": {
-    "dev": "parcel watch src/main/frontend/index.html -d build/generated/frontend/vue/static",
+    "dev": "parcel watch src/main/frontend/index.html -d out/production/resources/static",
     "headless": "parcel src/main/frontend/index.html -d build/generated/frontend/vue/static",
     "build": "parcel build src/main/frontend/index.html -d build/generated/frontend/vue/static --no-source-maps"
   }

@@ -56,7 +56,6 @@
     export default class Trainings extends Vue {
         @State(Namespace.TRAINING.namespace) trainingState: TrainingState;
         @Action('getTrainings', Namespace.TRAINING) getTrainings: any;
-        @Action('deleteTraining', Namespace.TRAINING) deleteTraining: any;
 
         get headers() {
             return [
@@ -104,6 +103,13 @@
     }
 </script>
 
-<style scoped>
+<style lang="less"
+       scoped>
+
+    @media only screen and (max-width: 500px) {
+        .container {
+            padding: 0;
+        }
+    }
 
 </style>

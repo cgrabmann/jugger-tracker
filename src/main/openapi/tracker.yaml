@@ -7,6 +7,9 @@ info:
 servers:
   - url: 'https://jugger.derletztedodo.at'
 
+security:
+  - ApiKeyAuth: []
+
 paths:
   /api/users:
     get:
@@ -42,6 +45,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+
+  /api/users/current:
+    get:
+      tags:
+        - User
+      summary: Returns current User
+      operationId: getCurrentUser
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        401:
+          description: not authorized
 
   /api/users/{id}:
     get:
@@ -242,6 +261,12 @@ paths:
           description: OK
 
 components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
   schemas:
     UserData:
       type: object
