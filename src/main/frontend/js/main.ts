@@ -3,7 +3,7 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 import Vue from 'vue';
 import Vuetify from 'vuetify';
-import de from 'vuetify/es5/locale/de'
+import de from './vue/locale/de'
 import colors from 'vuetify/es5/util/colors'
 import store from './vue/store'
 import Jugger from './vue/Jugger.vue'
@@ -16,11 +16,10 @@ Vue.use(Vuetify, {
         primary: colors.red.darken3
     },
     lang: {
-        locales: [ de ],
+        locales: {de},
         current: 'de'
     }
 });
-
 
 new Vue({
     el: '#app',

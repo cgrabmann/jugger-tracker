@@ -30,6 +30,15 @@
                                       required></v-text-field>
                     </v-flex>
                     <v-flex>
+                        <v-select
+                                v-model="user.role"
+                                :items="userRoles"
+                                item-text="text"
+                                item-value="value"
+                                label="Rolle"
+                        ></v-select>
+                    </v-flex>
+                    <v-flex>
                         <v-switch
                                 v-model="user.trackable"
                                 label="Trainingsbeteiligung aufzeichnen"
@@ -65,7 +74,7 @@
     import {Action, State} from 'vuex-class';
     import {Namespace} from '../store/namespace';
     import {UserState} from '../store/types';
-    import {User} from 'juggerApi'
+    import {User, UserData} from 'juggerApi'
 
     @Component({
         beforeRouteEnter(to, from, next) {
@@ -166,6 +175,15 @@
 
         get requiredRule(): any {
             return value => !!value || 'Pflichtfeld';
+        }
+
+        get userRoles(): string[] {
+            return Object.values(UserData.RoleEnum).map(v => {
+                return {
+                    value: v,
+                    text: this.$vuetify.t('$vuetify.user.roles.' + v)
+                }
+            });
         }
 
         lengthRule(length: number): any {
