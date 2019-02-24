@@ -3,49 +3,6 @@
         <v-toolbar fixed
                    app>
             <v-toolbar-title>{{ toolbarTitle }}</v-toolbar-title>
-            <v-btn v-if="id === 'new'"
-                   fab
-                   dark
-                   absolute
-                   right
-                   bottom
-                   color="indigo"
-                   @click="saveTraining()">
-                <v-icon>save</v-icon>
-            </v-btn>
-            <v-speed-dial v-else
-                          v-model="fab"
-                          absolute
-                          bottom
-                          right
-                          direction="bottom"
-                          transition="slide-y-transition">
-                <v-btn v-model="fab"
-                       :loading="saving"
-                       slot="activator"
-                       color="primary"
-                       dark
-                       fab
-                       class="speed-dial-button">
-                    <v-icon>menu</v-icon>
-                    <v-icon>close</v-icon>
-                </v-btn>
-                <v-btn fab
-                       dark
-                       small
-                       color="indigo"
-                       @click="saveTraining()">
-                    <v-icon>save</v-icon>
-                </v-btn>
-                <v-btn v-if="id !== 'new'"
-                       fab
-                       dark
-                       small
-                       color="secondary"
-                       @click="removeTraining()">
-                    <v-icon>delete</v-icon>
-                </v-btn>
-            </v-speed-dial>
         </v-toolbar>
         <v-form>
             <v-container fluid>
@@ -102,6 +59,24 @@
                                 {{ participant.item.firstName }} {{ participant.item.lastName }}
                             </template>
                         </v-select>
+                    </v-flex>
+                    <v-flex align-self-end>
+                        <v-spacer></v-spacer>
+                        <v-btn v-if="id !== 'new'"
+                               :loading="saving"
+                               flat
+                               color="red darken-4"
+                               @click="removeTraining()">
+                            Löschen
+                        </v-btn>
+                        <v-btn :loading="saving"
+                               round
+                               dark
+                               color="indigo"
+                               @click="saveTraining()">
+                            <v-icon left>save</v-icon>
+                            Speichern
+                        </v-btn>
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -205,7 +180,7 @@
         }
 
         get toolbarTitle(): string {
-            return 'Training ' + (this.id === 'new' ? 'Anlegen' : 'Bearbeiten');
+            return 'Training ' + (this.id === 'new' ? 'anlegen' : 'bearbeiten');
         }
 
         get trainingTypes(): string[] {

@@ -3,49 +3,6 @@
         <v-toolbar fixed
                    app>
             <v-toolbar-title>{{ toolbarTitle }}</v-toolbar-title>
-            <v-btn v-if="id === 'new'"
-                   fab
-                   dark
-                   absolute
-                   right
-                   bottom
-                   color="indigo"
-                   @click="saveUser()">
-                <v-icon>save</v-icon>
-            </v-btn>
-            <v-speed-dial v-else
-                          v-model="fab"
-                          absolute
-                          bottom
-                          right
-                          direction="bottom"
-                          transition="slide-y-transition">
-                <v-btn v-model="fab"
-                       :loading="saving"
-                       slot="activator"
-                       color="primary"
-                       dark
-                       fab
-                       class="speed-dial-button">
-                    <v-icon>menu</v-icon>
-                    <v-icon>close</v-icon>
-                </v-btn>
-                <v-btn fab
-                       dark
-                       small
-                       color="indigo"
-                       @click="saveUser()">
-                    <v-icon>save</v-icon>
-                </v-btn>
-                <v-btn v-if="!!user.id"
-                       fab
-                       dark
-                       small
-                       color="secondary"
-                       @click="removeUser()">
-                    <v-icon>delete</v-icon>
-                </v-btn>
-            </v-speed-dial>
         </v-toolbar>
         <v-form v-model="valid">
             <v-container fluid>
@@ -75,8 +32,26 @@
                     <v-flex>
                         <v-switch
                                 v-model="user.trackable"
-                                label="Trainingsbeteiligung tracken"
+                                label="Trainingsbeteiligung aufzeichnen"
                                 color="primary"></v-switch>
+                    </v-flex>
+                    <v-flex align-self-end>
+                        <v-spacer></v-spacer>
+                        <v-btn v-if="!!user.id"
+                               :loading="saving"
+                               flat
+                               color="red darken-4"
+                               @click="removeUser()">
+                            Löschen
+                        </v-btn>
+                        <v-btn :loading="saving"
+                               round
+                               dark
+                               color="indigo"
+                               @click="saveUser()">
+                            <v-icon left>save</v-icon>
+                            Speichern
+                        </v-btn>
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -123,7 +98,6 @@
         valid: boolean = false;
         id: (string | number) = null;
         saving: boolean = false;
-        fab: boolean = false;
 
         openNew(id: (string | number)) {
             this.userState.editUser = {
@@ -155,7 +129,6 @@
         }
 
         removeUser() {
-            this.fab = false;
             if (confirm('Mitglied "' + this.user.firstName + ' ' + this.user.lastName + '" wirklich löschen?')) {
                 this.saving = true;
                 this.deleteUser(this.user.id)
@@ -169,7 +142,7 @@
         }
 
         get toolbarTitle(): string {
-            return 'Mitglied ' + (this.id === 'new' ? 'Anlegen' : 'Bearbeiten');
+            return 'Mitglied ' + (this.id === 'new' ? 'anlegen' : 'bearbeiten');
         }
 
         get user(): User {

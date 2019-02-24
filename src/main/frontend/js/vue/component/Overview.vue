@@ -9,14 +9,6 @@
                     Überblick
                 </template>
             </v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-toolbar-items>
-                <v-btn depressed
-                       color="primary"
-                       to="/trainings/new">
-                    Training anlegen
-                </v-btn>
-            </v-toolbar-items>
         </v-toolbar>
     </div>
 </template>
