@@ -2,14 +2,13 @@
     <v-card>
         <v-toolbar fixed app>
             <v-toolbar-title>Trainings</v-toolbar-title>
-            <v-btn fab
+            <v-spacer></v-spacer>
+            <v-btn round
                    dark
-                   absolute
-                   right
-                   bottom
                    to="/trainings/new"
                    color="primary">
-                <v-icon>add</v-icon>
+                <v-icon left>add</v-icon>
+                anlegen
             </v-btn>
         </v-toolbar>
         <v-container fluid>
@@ -17,7 +16,9 @@
                       justify-space-around>
                 <v-flex>
                     <v-data-table :headers="headers"
-                                  :items="trainings">
+                                  :items="trainings"
+                                  class="mb-3"
+                                  hide-actions>
                         <template slot="items" slot-scope="props">
                             <tr @click="openTrainingAction(props.item)">
                                 <td class="text-xs-center">{{props.item.date}}</td>
@@ -33,7 +34,7 @@
                                     </template>
                                 </td>
                                 <td>({{props.item.participants.length}})</td>
-                                <td><v-icon>open_in_new</v-icon></td>
+                                <td><v-icon>keyboard_arrow_right</v-icon></td>
                             </tr>
                         </template>
                     </v-data-table>

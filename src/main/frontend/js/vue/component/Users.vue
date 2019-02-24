@@ -2,14 +2,13 @@
     <v-card>
         <v-toolbar fixed app>
             <v-toolbar-title>Mitglieder</v-toolbar-title>
-            <v-btn fab
+            <v-spacer></v-spacer>
+            <v-btn round
                    dark
-                   absolute
-                   right
-                   bottom
                    to="/user/new"
                    color="primary">
-                <v-icon>add</v-icon>
+                <v-icon left>add</v-icon>
+                anlegen
             </v-btn>
         </v-toolbar>
         <v-container fluid>
@@ -18,12 +17,13 @@
                 <v-flex>
                     <v-data-table :headers="headers"
                                   :items="users"
-                                  class="mb-3">
+                                  class="mb-3"
+                                  hide-actions>
                         <template slot="items" slot-scope="props">
                             <tr @click="openUserAction(props.item)">
                                 <td class="text-xs-center">{{props.item.firstName}}</td>
                                 <td class="text-xs-center">{{props.item.lastName}}</td>
-                                <td><v-icon>open_in_new</v-icon></td>
+                                <td><v-icon>keyboard_arrow_right</v-icon></td>
                             </tr>
                         </template>
                     </v-data-table>
