@@ -62,5 +62,17 @@
             </dropColumn>
         </rollback>
     </changeSet>
+    <changeSet id="4" author="Dodo">
+        <addColumn tableName="user">
+            <column name="role" type="varchar(20)" defaultValue="MITGLIED">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="user">
+                <column name="role"/>
+            </dropColumn>
+        </rollback>
+    </changeSet>
 
 </databaseChangeLog>

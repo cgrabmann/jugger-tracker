@@ -33,6 +33,8 @@
                         <v-select
                                 v-model="user.role"
                                 :items="userRoles"
+                                item-text="text"
+                                item-value="value"
                                 label="Rolle"
                         ></v-select>
                     </v-flex>
