@@ -29,6 +29,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserByEmail(@NotNull String email) {
+        return userMapper.toDto(userRepository.findByEmail(email));
+    }
+
+    @Override
     public @NotNull List<User> getUsers() {
         return userMapper.toDtos(userRepository.findAll());
     }

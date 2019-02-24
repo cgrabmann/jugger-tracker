@@ -10,6 +10,7 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import java.io.InputStream;
+import java.util.Arrays;
 
 @Slf4j
 public class MockMailServer implements JavaMailSender {
@@ -30,7 +31,12 @@ public class MockMailServer implements JavaMailSender {
 
     @Override
     public void send(MimeMessage mimeMessage) throws MailException {
-        log.info(mimeMessage.toString());
+        try {
+            log.info(Arrays.toString(mimeMessage.getAllRecipients()));
+            log.info(mimeMessage.getContent().toString());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

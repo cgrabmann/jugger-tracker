@@ -1,19 +1,29 @@
 package at.jugger.tracker.service.impl;
 
 import at.jugger.tracker.service.EmailService;
-import org.springframework.beans.factory.annotation.Autowired;
+import at.jugger.tracker.service.TemplateService;
+import at.jugger.tracker.service.dto.LoginToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 @Service
 public class EmailServiceImpl implements EmailService {
-    @Autowired
-    private JavaMailSender emailSender;
+    private final JavaMailSender emailSender;
+    private final TemplateService templateService;
 
     @Value("${spring.mail.username}")
     private String from;
+
+    public EmailServiceImpl(JavaMailSender emailSender, TemplateService templateService) {
+        this.emailSender = emailSender;
+        this.templateService = templateService;
+    }
 
     @Override
     public void send(String to, String subject, String text) {
@@ -23,5 +33,24 @@ public class EmailServiceImpl implements EmailService {
         message.setSubject(subject);
         message.setText(text);
         emailSender.send(message);
+    }
+
+    @Override
+    public void sendAuthenticationEmail(LoginToken loginToken, String authenticationUrl) {
+        try {
+            MimeMessage message = emailSender.createMimeMessage();
+
+            message.setFrom(from);
+            message.setRecipients(Message.RecipientType.TO, loginToken.getUser().getEmail());
+            String subject = "Login beim Jugger Tracker von Jugger Vienna";
+            message.setSubject(subject);
+
+            String htmlMsg = templateService.getAuthenticationEmailService(loginToken, authenticationUrl);
+            message.setContent(htmlMsg, "text/html");
+
+            emailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 }
