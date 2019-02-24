@@ -30,6 +30,9 @@ public class UserEntity {
     @Column(name = "email", nullable = false, length = 50)
     @NonNull
     private String email;
+    @Column(name = "role", nullable = false, length = 20)
+    @NonNull
+    private String role;
     @Column(name = "trackable", nullable = false)
     private boolean trackable;
 }

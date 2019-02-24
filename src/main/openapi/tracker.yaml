@@ -226,6 +226,9 @@ components:
           format: email
         trackable:
           type: boolean
+        role:
+          type: string
+          enum: [mitglied, trainer, admin]
     User:
       allOf:
         - $ref: '#/components/schemas/UserData'
