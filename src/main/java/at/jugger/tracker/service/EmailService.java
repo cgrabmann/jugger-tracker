@@ -1,7 +1,7 @@
 package at.jugger.tracker.service;
 
+import at.jugger.tracker.exceptions.UnableToSendAuthenticationEmailException;
 import at.jugger.tracker.service.dto.LoginToken;
-import at.jugger.tracker.service.exceptions.UnableToSendAuthenticationEmailException;
 
 import javax.validation.constraints.NotNull;
 

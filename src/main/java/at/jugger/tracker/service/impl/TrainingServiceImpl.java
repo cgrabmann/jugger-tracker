@@ -2,6 +2,7 @@ package at.jugger.tracker.service.impl;
 
 import at.jugger.tracker.domain.TrainingEntity;
 import at.jugger.tracker.dto.Training;
+import at.jugger.tracker.exceptions.TrainingNotFoundException;
 import at.jugger.tracker.mapper.TrainingMapper;
 import at.jugger.tracker.repository.TrainingRepository;
 import at.jugger.tracker.service.TrainingService;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class TrainingServiceImpl implements TrainingService {
@@ -42,10 +42,11 @@ public class TrainingServiceImpl implements TrainingService {
 
     @Override
     public @NotNull Training updateTraining(@NotNull LocalDate date, @NotNull Training training) {
-        TrainingEntity trainingEntity = Objects.requireNonNull(
-                trainingRepository.findByDate(date),
-                "Training with date '" + date + "' not fund."
-        );
+        TrainingEntity trainingEntity = trainingRepository.findByDate(date);
+
+        if (trainingEntity == null) {
+            throw new TrainingNotFoundException("date", date.toString());
+        }
 
         trainingEntity = trainingMapper.toEntity(training, trainingEntity);
         return trainingMapper.toDto(trainingRepository.save(trainingEntity));

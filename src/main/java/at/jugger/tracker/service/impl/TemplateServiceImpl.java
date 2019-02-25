@@ -1,8 +1,8 @@
 package at.jugger.tracker.service.impl;
 
+import at.jugger.tracker.exceptions.UnableToSendAuthenticationEmailException;
 import at.jugger.tracker.service.TemplateService;
 import at.jugger.tracker.service.dto.LoginToken;
-import at.jugger.tracker.service.exceptions.UnableToSendAuthenticationEmailException;
 import at.jugger.tracker.service.impl.template.AuthenticationEmailData;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;

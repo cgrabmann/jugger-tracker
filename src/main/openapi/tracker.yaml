@@ -289,3 +289,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/User'
+
+    TrackerError:
+      properties:
+        type:
+          type: string
+          enum: [USER_NOT_FOUND, TOKEN_NOT_FOUND, TOKEN_ALREADY_USED, TOKEN_EXPIRED,
+                 UNABLE_TO_SEND_AUTHENTICATION_EMAIL, TRAINING_NOT_FOUND]
+        message:
+          type: string

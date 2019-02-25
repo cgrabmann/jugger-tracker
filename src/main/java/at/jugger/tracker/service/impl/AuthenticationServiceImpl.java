@@ -2,14 +2,14 @@ package at.jugger.tracker.service.impl;
 
 import at.jugger.tracker.domain.LoginTokenEntity;
 import at.jugger.tracker.dto.User;
+import at.jugger.tracker.exceptions.TokenAlreadyUsedException;
+import at.jugger.tracker.exceptions.TokenExpiredException;
+import at.jugger.tracker.exceptions.TokenNotFoundException;
 import at.jugger.tracker.mapper.LoginTokenMapper;
 import at.jugger.tracker.mapper.UserMapper;
 import at.jugger.tracker.repository.LoginTokenRepository;
 import at.jugger.tracker.service.AuthenticationService;
 import at.jugger.tracker.service.dto.LoginToken;
-import at.jugger.tracker.service.exceptions.NoTokenException;
-import at.jugger.tracker.service.exceptions.TokenAlreadyUsedException;
-import at.jugger.tracker.service.exceptions.TokenExpiredException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -52,13 +52,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public void authenticate(String tokenId) throws NoTokenException, TokenAlreadyUsedException, TokenExpiredException {
-        LoginTokenEntity loginToken = loginTokenRepository.findByToken(tokenId);
+    public void authenticate(String token) throws TokenNotFoundException, TokenAlreadyUsedException, TokenExpiredException {
+        LoginTokenEntity loginToken = loginTokenRepository.findByToken(token);
         TokenState tokenState = getTokenState(loginToken);
 
         switch (tokenState) {
             case NO_TOKEN:
-                throw new NoTokenException();
+                throw new TokenNotFoundException(token);
             case USED:
                 throw new TokenAlreadyUsedException(loginTokenMapper.toDto(loginToken));
             case EXPIRED:

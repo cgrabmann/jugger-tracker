@@ -3,11 +3,10 @@ package at.jugger.tracker.controller;
 import at.jugger.tracker.api.UserApiDelegate;
 import at.jugger.tracker.dto.User;
 import at.jugger.tracker.dto.UserData;
+import at.jugger.tracker.exceptions.UserNotFoundException;
 import at.jugger.tracker.service.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -24,9 +23,11 @@ public class UserController implements UserApiDelegate {
     @Override
     public ResponseEntity<User> getUser(@NotNull Long id) {
         User user = userService.getUser(id);
+
         if (user == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new UserNotFoundException("id", Long.toString(id));
         }
+
         return ResponseEntity.ok(userService.getUser(id));
     }
 
