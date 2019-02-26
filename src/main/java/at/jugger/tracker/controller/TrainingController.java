@@ -2,6 +2,7 @@ package at.jugger.tracker.controller;
 
 import at.jugger.tracker.api.TrainingApiDelegate;
 import at.jugger.tracker.dto.Training;
+import at.jugger.tracker.exceptions.TrainingNotFoundException;
 import at.jugger.tracker.service.TrainingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +32,13 @@ public class TrainingController implements TrainingApiDelegate {
 
     @Override
     public ResponseEntity<Training> getTraining(@NotNull LocalDate date) {
-        return ResponseEntity.ok(trainingService.getTraining(date));
+        Training training = trainingService.getTraining(date);
+
+        if (training == null) {
+            throw new TrainingNotFoundException("date", date.toString());
+        }
+
+        return ResponseEntity.ok(training);
     }
 
     @Override

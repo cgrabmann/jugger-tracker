@@ -1,13 +1,13 @@
 package at.jugger.tracker.service;
 
 import at.jugger.tracker.dto.User;
+import at.jugger.tracker.exceptions.TokenAlreadyUsedException;
+import at.jugger.tracker.exceptions.TokenExpiredException;
+import at.jugger.tracker.exceptions.TokenNotFoundException;
 import at.jugger.tracker.service.dto.LoginToken;
-import at.jugger.tracker.service.exceptions.NoTokenException;
-import at.jugger.tracker.service.exceptions.TokenAlreadyUsedException;
-import at.jugger.tracker.service.exceptions.TokenExpiredException;
 
 public interface AuthenticationService {
     LoginToken createLoginToken(User userEntity);
 
-    void authenticate(String tokenId) throws NoTokenException, TokenAlreadyUsedException, TokenExpiredException;
+    void authenticate(String tokenId) throws TokenNotFoundException, TokenAlreadyUsedException, TokenExpiredException;
 }

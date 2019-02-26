@@ -1,9 +1,9 @@
 package at.jugger.tracker.service.impl;
 
+import at.jugger.tracker.exceptions.UnableToSendAuthenticationEmailException;
 import at.jugger.tracker.service.EmailService;
 import at.jugger.tracker.service.TemplateService;
 import at.jugger.tracker.service.dto.LoginToken;
-import at.jugger.tracker.service.exceptions.UnableToSendAuthenticationEmailException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

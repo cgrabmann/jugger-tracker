@@ -3,6 +3,7 @@ package at.jugger.tracker.service.impl;
 import at.jugger.tracker.domain.UserEntity;
 import at.jugger.tracker.dto.User;
 import at.jugger.tracker.dto.UserData;
+import at.jugger.tracker.exceptions.UserNotFoundException;
 import at.jugger.tracker.mapper.UserMapper;
 import at.jugger.tracker.repository.UserRepository;
 import at.jugger.tracker.service.UserService;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -49,10 +49,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public @NotNull User updateUser(Long id, UserData user) {
-        UserEntity userEntity = Objects.requireNonNull(
-                userRepository.findByUserId(id),
-                "User with ID '" + id + "' not fund."
-        );
+        UserEntity userEntity = userRepository.findByUserId(id);
+
+        if (userEntity == null) {
+            throw new UserNotFoundException("id", Long.toString(id));
+        }
 
         userEntity = userMapper.toEntity(user, userEntity);
         userEntity = userRepository.save(userEntity);
