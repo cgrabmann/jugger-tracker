@@ -23,9 +23,15 @@ public interface UserMapper {
     List<User> toDtos(List<UserEntity> entities);
 
     @Mapping(target = "trackable", defaultValue = "false")
+    @Mappings(
+            @Mapping(target = "userId", ignore = true)
+    )
     UserEntity toEntity(UserData user, @MappingTarget UserEntity entity);
 
     @Mapping(target = "trackable", defaultValue = "false")
+    @Mappings(
+            @Mapping(target = "userId", ignore = true)
+    )
     UserEntity toEntity(UserData newUser);
 
     @InheritInverseConfiguration
