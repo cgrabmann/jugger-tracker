@@ -50,7 +50,6 @@ public class EmailServiceImpl implements EmailService {
             message.setContent(htmlMsg, "text/html");
 
             emailSender.send(message);
-            throw new MessagingException("Aaaaah, wir werden alle sterben!");
         } catch (MessagingException e) {
             throw new UnableToSendAuthenticationEmailException(e);
         }
