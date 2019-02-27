@@ -21,15 +21,18 @@
     import Vue from 'vue';
     import Component from 'vue-class-component';
     import {Namespace} from '../store/namespace';
-    import {Action, State} from 'vuex-class';
+    import {Action, Getter, State} from 'vuex-class';
     import {UserState} from '../store/types';
 
     @Component({
         beforeRouteEnter(to, from, next) {
             next(vm => {
-                if (vm.userState.currentUser != null) {
+                if (vm.isLoggedIn) {
                     next('/overview');
                 } else {
+                    vm.getCurrentUser()
+                        .then(() => vm.$router.push('/overview'))
+                        .catch(() => vm.$router.push('/login'));
                     next();
                 }
             });
@@ -38,14 +41,7 @@
     export default class Loading extends Vue {
         @State(Namespace.USER.namespace) userState: UserState;
         @Action('getCurrentUser', Namespace.USER) getCurrentUser: any;
-
-        beforeMount() {
-            if (this.userState.currentUser == null) {
-                this.getCurrentUser()
-                    .then(() => this.$router.push('/overview'))
-                    .catch(() => this.$router.push('/login'));
-            }
-        }
+        @Getter('isLoggedIn', Namespace.USER) isLoggedIn: boolean;
     }
 </script>
 

@@ -71,6 +71,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
+    @Override
+    public void logout() {
+        SecurityContextHolder.getContext().setAuthentication(null);
+    }
+
     private void createSession(User user) {
         UsernamePasswordAuthenticationToken springToken = new UsernamePasswordAuthenticationToken(user.getEmail(), "");
         springToken.setDetails(user);
