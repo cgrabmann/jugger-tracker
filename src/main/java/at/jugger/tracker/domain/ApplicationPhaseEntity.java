@@ -37,12 +37,12 @@ public class ApplicationPhaseEntity {
     private LocalDate to;
 
     @ManyToOne
-    @JoinColumn(name = "tournament_id")
+    @JoinColumn(name = "tournament_id", nullable = false, insertable = false, updatable = false)
     private TournamentEntity tournament;
 
     @ManyToMany
     @JoinTable(name = "user_applies_for_phase",
-            joinColumns = @JoinColumn(name = "application_phase_id", referencedColumnName = "application_phase_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
+            joinColumns = @JoinColumn(name = "application_phase_id", referencedColumnName = "application_phase_id", nullable = false, updatable = false),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false, updatable = false))
     private List<UserEntity> participants;
 }
