@@ -3,7 +3,8 @@ package at.jugger.tracker.service.impl;
 import at.jugger.tracker.domain.TournamentEntity;
 import at.jugger.tracker.dto.Tournament;
 import at.jugger.tracker.dto.TournamentData;
-import at.jugger.tracker.mapper.TournamentMapper;
+import at.jugger.tracker.mapper.TournamentCreateMapper;
+import at.jugger.tracker.mapper.TournamentUpdateMapper;
 import at.jugger.tracker.repository.TournamentRepository;
 import at.jugger.tracker.service.TournamentService;
 import org.springframework.stereotype.Service;
@@ -16,30 +17,32 @@ import java.util.Objects;
 public class TournamentServiceImpl implements TournamentService {
 
     private final TournamentRepository tournamentRepository;
-    private final TournamentMapper tournamentMapper;
+    private final TournamentCreateMapper tournamentCreateMapper;
+    private final TournamentUpdateMapper tournamentUpdateMapper;
 
-    TournamentServiceImpl(TournamentRepository tournamentRepository, TournamentMapper tournamentMapper) {
+    TournamentServiceImpl(TournamentRepository tournamentRepository, TournamentCreateMapper tournamentCreateMapper, TournamentUpdateMapper tournamentUpdateMapper) {
         this.tournamentRepository = tournamentRepository;
-        this.tournamentMapper = tournamentMapper;
+        this.tournamentCreateMapper = tournamentCreateMapper;
+        this.tournamentUpdateMapper = tournamentUpdateMapper;
     }
 
     @Override
     public Tournament getTournament(@NotNull Long id) {
-        return tournamentMapper.toDto(tournamentRepository.findByTournamentId(id));
+        return tournamentCreateMapper.toDto(tournamentRepository.findByTournamentId(id));
     }
 
     @Override
     public @NotNull List<Tournament> getTournaments() {
-        return tournamentMapper.toDtos(tournamentRepository.findAll());
+        return tournamentCreateMapper.toDtos(tournamentRepository.findAll());
     }
 
     @Override
     public @NotNull Tournament createTournament(@NotNull TournamentData newTournament) {
-        TournamentEntity tournamentEntity = tournamentMapper.toEntity(newTournament);
+        TournamentEntity tournamentEntity = tournamentCreateMapper.toEntity(newTournament);
 
         tournamentEntity = tournamentRepository.save(tournamentEntity);
 
-        return tournamentMapper.toDto(tournamentEntity);
+        return tournamentCreateMapper.toDto(tournamentEntity);
     }
 
     @Override
@@ -49,10 +52,10 @@ public class TournamentServiceImpl implements TournamentService {
                 "Tournament with ID '" + id + "' not fund."
         );
 
-        tournamentEntity = tournamentMapper.toEntity(tournament, tournamentEntity);
+        tournamentEntity = tournamentUpdateMapper.toEntity(tournament, tournamentEntity);
         tournamentEntity = tournamentRepository.save(tournamentEntity);
 
-        return tournamentMapper.toDto(tournamentEntity);
+        return tournamentUpdateMapper.toDto(tournamentEntity);
     }
 
     @Override

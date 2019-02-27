@@ -125,13 +125,13 @@
             </column>
             <column name="tournament_id" type="int">
                 <constraints primaryKey="true" nullable="false" foreignKeyName="fk_application_phase_tournament"
-                             references="tournament(tournament_id)"/>
+                             references="tournament(tournament_id)" deleteCascade="true"/>
             </column>
         </createTable>
         <createTable tableName="user_applies_for_phase">
             <column name="application_phase_id" type="int">
                 <constraints primaryKey="true" nullable="false" foreignKeyName="fk_application_phase"
-                             references="application_phase(application_phase_id)"/>
+                             references="application_phase(application_phase_id)" deleteCascade="true"/>
             </column>
             <column name="user_id" type="int">
                 <constraints primaryKey="true" nullable="false" foreignKeyName="fk_application_user"

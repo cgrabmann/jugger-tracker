@@ -14,8 +14,8 @@ import org.mapstruct.Mappings;
 
 import java.util.List;
 
-@Mapper(config = MapperConfig.class, uses = ApplicationPhaseMapper.class)
-public interface TournamentMapper {
+@Mapper(config = MapperConfig.class, uses = ApplicationPhaseUpdateMapper.class)
+public interface TournamentUpdateMapper {
 
     @Mappings({
             @Mapping(target = "id", source = "tournamentId")
@@ -25,15 +25,9 @@ public interface TournamentMapper {
     List<Tournament> toDtos(List<TournamentEntity> entities);
 
     @InheritInverseConfiguration
-    @Mappings({
-            @Mapping(target = "tournamentId", ignore = true)
-    })
     TournamentEntity toEntity(TournamentData tournament, @MappingTarget TournamentEntity entity);
 
     @InheritInverseConfiguration
-    @Mappings({
-            @Mapping(target = "tournamentId", ignore = true)
-    })
     TournamentEntity toEntity(TournamentData tournament);
 
     @AfterMapping
