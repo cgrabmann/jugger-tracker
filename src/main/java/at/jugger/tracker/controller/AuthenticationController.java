@@ -8,6 +8,7 @@ import at.jugger.tracker.service.EmailService;
 import at.jugger.tracker.service.UserService;
 import at.jugger.tracker.service.dto.LoginToken;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
