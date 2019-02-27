@@ -5,6 +5,7 @@ import {UserAPI} from '../../api';
 
 const namespaced = true;
 const state: UserState = {
+    currentUser: null,
     editUser: {
         firstName: null,
         lastName: null,
@@ -37,6 +38,10 @@ export const UserModule: Module<UserState, RootState> = {
         deleteUser(context, id:number): any {
             return UserAPI.Instance.getUserAPI().deleteUser(id)
                 .then(() => context.dispatch('getUsers'));
+        },
+        getCurrentUser(context): any {
+            return UserAPI.Instance.getUserAPI().getCurrentUser()
+                .then((response: User) => context.commit('currentUserLoaded', response));
         }
     },
     mutations: {
@@ -48,6 +53,9 @@ export const UserModule: Module<UserState, RootState> = {
         },
         usersLoaded(state, users: User[]) {
             state.users = users;
+        },
+        currentUserLoaded(state, user: User) {
+            state.currentUser = user;
         }
     }
 };

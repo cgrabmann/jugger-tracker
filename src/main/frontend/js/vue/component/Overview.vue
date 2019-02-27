@@ -9,6 +9,11 @@
                     Überblick
                 </template>
             </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn round
+                   color="primary">
+                abmelden
+            </v-btn>
         </v-toolbar>
     </div>
 </template>

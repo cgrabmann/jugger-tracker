@@ -5,13 +5,11 @@
                     Error 404
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-toolbar-items>
-                <v-btn depressed
-                       color="primary"
-                       @click="$router.go(-1)">
-                    Zurück
-                </v-btn>
-            </v-toolbar-items>
+            <v-btn round
+                   color="primary"
+                   @click="$router.go(-1)">
+                Zurück
+            </v-btn>
         </v-toolbar>
         <v-container fluid>
             <v-layout column>

@@ -8,12 +8,14 @@ import colors from 'vuetify/es5/util/colors'
 import store from './vue/store'
 import Jugger from './vue/Jugger.vue'
 import router from './vue/router/router';
-import {TrainingAPI, UserAPI} from './api';
+import {TrainingAPI, UserAPI, AuthenticationAPI} from './api';
 
 Vue.use(Vuetify, {
     iconfont: 'md',
     theme: {
-        primary: colors.red.darken3
+        primary: colors.red.darken3,
+        error: colors.red.darken4,
+        success: colors.indigo
     },
     lang: {
         locales: {de},
@@ -34,6 +36,7 @@ new Vue({
 
         UserAPI.Instance.init(host);
         TrainingAPI.Instance.init(host);
+        AuthenticationAPI.Instance.init(host);
     },
     render(r) {
         return r(Jugger, {});

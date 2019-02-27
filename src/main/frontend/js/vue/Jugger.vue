@@ -1,40 +1,42 @@
 <template>
     <v-app light>
-        <v-bottom-nav v-if="$vuetify.breakpoint.smAndDown"
-                      fixed
-                      :value="true"
-                      app>
-            <template v-for="route in routes">
-                <v-btn depressed
-                       :to="route.route"
-                       color="primary--text">
-                    <span>{{ route.title }}</span>
-                    <v-icon>{{ route.icon }}</v-icon>
-                </v-btn>
-            </template>
-        </v-bottom-nav>
-        <v-navigation-drawer v-else
-                             fixed
-                             app
-                             permanent>
-            <v-list dense
-                    class="pt-0">
-                <v-toolbar>
-                    <v-toolbar-title>Jugger Vienna</v-toolbar-title>
-                </v-toolbar>
-                <v-spacer class="pt-3"></v-spacer>
+        <template :v-if="false">
+            <v-bottom-nav v-if="$vuetify.breakpoint.smAndDown"
+                          fixed
+                          :value="true"
+                          app>
                 <template v-for="route in routes">
-                    <v-list-tile :to="route.route">
-                        <v-list-tile-action>
-                            <v-icon>{{ route.icon }}</v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                            <v-list-tile-title>{{ route.title }}</v-list-tile-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
+                    <v-btn depressed
+                           :to="route.route"
+                           color="primary--text">
+                        <span>{{ route.title }}</span>
+                        <v-icon>{{ route.icon }}</v-icon>
+                    </v-btn>
                 </template>
-            </v-list>
-        </v-navigation-drawer>
+            </v-bottom-nav>
+            <v-navigation-drawer v-else
+                                 fixed
+                                 app
+                                 permanent>
+                <v-list dense
+                        class="pt-0">
+                    <v-toolbar>
+                        <v-toolbar-title>Jugger Vienna</v-toolbar-title>
+                    </v-toolbar>
+                    <v-spacer class="pt-3"></v-spacer>
+                    <template v-for="route in routes">
+                        <v-list-tile :to="route.route">
+                            <v-list-tile-action>
+                                <v-icon>{{ route.icon }}</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{ route.title }}</v-list-tile-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                    </template>
+                </v-list>
+            </v-navigation-drawer>
+        </template>
         <v-content>
             <keep-alive>
                 <router-view></router-view>
@@ -87,12 +89,6 @@
     .speed-dial-button {
         .v-btn__content {
             height: 25px;
-        }
-    }
-
-    @media only screen and (max-width: 500px) {
-        .container {
-            padding: 0;
         }
     }
 </style>

@@ -2,49 +2,63 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import VueBreadcrumbs from 'vue2-breadcrumbs';
 import Overview from '../component/Overview.vue'
+import Loading from '../component/Loading.vue'
 import User from '../component/User.vue'
 import Users from '../component/Users.vue'
 import Trainings from '../component/Trainings.vue'
 import Training from '../component/Training.vue'
 import Error from '../component/Error.vue'
+import Login from '../component/Login.vue'
+import store from '../store'
 
 Vue.use(Router);
 Vue.use(VueBreadcrumbs);
 
-export default new Router({
+const router = new Router({
     routes: [
         {
             path: '/',
-            redirect: '/overview'
+            component: Loading
         }, {
             path: '/overview',
             component: Overview,
             meta: {
-                breadcrumb: 'Overview'
+                breadcrumb: 'Overview',
+                requiresAuth: true
             }
         }, {
             path: '/user',
             component: Users,
             meta: {
-                breadcrumb: 'Users'
+                breadcrumb: 'Users',
+                requiresAuth: true
             }
         }, {
             path: '/user/:id',
             component: User,
             meta: {
-                breadcrumb: 'User'
+                breadcrumb: 'User',
+                requiresAuth: true
             }
         }, {
             path: '/trainings',
             component: Trainings,
             meta: {
-                breadcrumb: 'Trainings'
+                breadcrumb: 'Trainings',
+                requiresAuth: true
             }
         }, {
             path: '/trainings/:id',
             component: Training,
             meta: {
-                breadcrumb: 'New Training'
+                breadcrumb: 'Training',
+                requiresAuth: true
+            }
+        }, {
+            path: '/login',
+            component: Login,
+            meta: {
+                breadcrumb: 'Login'
             }
         }, {
             path: '/error',
@@ -58,3 +72,16 @@ export default new Router({
         }
     ]
 });
+
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(route => route.meta.requiresAuth)) {
+        if (store.state.UserModule.currentUser == null) {
+            next('/');
+            return;
+        }
+    }
+
+    next();
+});
+
+export default router;

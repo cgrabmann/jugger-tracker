@@ -6,10 +6,15 @@ import at.jugger.tracker.dto.UserData;
 import at.jugger.tracker.exceptions.UserNotFoundException;
 import at.jugger.tracker.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class UserController implements UserApiDelegate {
@@ -50,5 +55,11 @@ public class UserController implements UserApiDelegate {
     @Override
     public ResponseEntity<User> updateUser(@NotNull Long id, @NotNull UserData user) {
         return ResponseEntity.ok(userService.updateUser(id, user));
+    }
+
+    @Override
+    public ResponseEntity<User> getCurrentUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(userService.getUserByEmail(email));
     }
 }
