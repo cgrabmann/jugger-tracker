@@ -27,7 +27,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
                 .exceptionHandling()
                 .defaultAuthenticationEntryPointFor(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED), forbiddenUrls)
                 .and()
@@ -38,6 +37,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/")
                 .permitAll();
+
+        if (!csrfEnabled) {
+            http
+                    .csrf().disable();
+        }
     }
 
     @Override

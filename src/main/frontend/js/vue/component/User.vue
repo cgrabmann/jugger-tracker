@@ -49,14 +49,14 @@
                         <v-btn v-if="!!user.id"
                                :loading="saving"
                                flat
-                               color="red darken-4"
+                               color="error"
                                @click="removeUser()">
                             Löschen
                         </v-btn>
                         <v-btn :loading="saving"
                                round
                                dark
-                               color="indigo"
+                               color="success"
                                @click="saveUser()">
                             <v-icon left>save</v-icon>
                             Speichern

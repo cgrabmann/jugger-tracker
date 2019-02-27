@@ -65,14 +65,14 @@
                         <v-btn v-if="id !== 'new'"
                                :loading="saving"
                                flat
-                               color="red darken-4"
+                               color="error"
                                @click="removeTraining()">
                             Löschen
                         </v-btn>
                         <v-btn :loading="saving"
                                round
                                dark
-                               color="indigo"
+                               color="success"
                                @click="saveTraining()">
                             <v-icon left>save</v-icon>
                             Speichern

@@ -28,7 +28,8 @@
                     <v-flex align-self-end>
                         <v-btn round
                                dark
-                               color="indigo" @click="requestToken()">
+                               color="success"
+                               @click="requestToken()">
                             Token anfordern
                         </v-btn>
                     </v-flex>

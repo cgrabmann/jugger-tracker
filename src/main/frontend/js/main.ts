@@ -13,7 +13,9 @@ import {TrainingAPI, UserAPI, AuthenticationAPI} from './api';
 Vue.use(Vuetify, {
     iconfont: 'md',
     theme: {
-        primary: colors.red.darken3
+        primary: colors.red.darken3,
+        error: colors.red.darken4,
+        success: colors.indigo
     },
     lang: {
         locales: {de},
