@@ -97,5 +97,54 @@
             <dropTable tableName="login_token"/>
         </rollback>
     </changeSet>
+    <changeSet id="6" author="Dodo">
+        <createTable tableName="tournament">
+            <column name="tournament_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="char(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state" type="varchar(20)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="max_teams" type="int">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <createTable tableName="application_phase">
+            <column name="application_phase_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="from_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="to_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tournament_id" type="int">
+                <constraints primaryKey="true" nullable="false" foreignKeyName="fk_application_phase_tournament"
+                             references="tournament(tournament_id)" deleteCascade="true"/>
+            </column>
+        </createTable>
+        <createTable tableName="user_applies_for_phase">
+            <column name="application_phase_id" type="int">
+                <constraints primaryKey="true" nullable="false" foreignKeyName="fk_application_phase"
+                             references="application_phase(application_phase_id)" deleteCascade="true"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints primaryKey="true" nullable="false" foreignKeyName="fk_application_user"
+                             references="user(user_id)"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="user_applies_for_phase"/>
+            <dropTable tableName="application_phase"/>
+            <dropTable tableName="tournament"/>
+        </rollback>
+    </changeSet>
 
 </databaseChangeLog>

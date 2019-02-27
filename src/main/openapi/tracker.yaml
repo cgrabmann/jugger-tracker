@@ -260,6 +260,103 @@ paths:
         200:
           description: OK
 
+
+  /api/tournaments:
+    get:
+      tags:
+        - Tournament
+      summary: Returns a list of all tournaments
+      operationId: getTournaments
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tournament'
+    put:
+      tags:
+        - Tournament
+      summary: Creates a new tournament
+      operationId: createTournament
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TournamentData'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tournament'
+
+  /api/tournaments/{id}:
+    get:
+      tags:
+        - Tournament
+      summary: Returns a tournament by id
+      operationId: getTournament
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: tournament ID
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tournament'
+    post:
+      tags:
+        - Tournament
+      summary: Updates a tournament by id
+      operationId: updateTournament
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: tournament ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TournamentData'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tournament'
+    delete:
+      tags:
+        - Tournament
+      summary: Deletes a tournament by id
+      operationId: deleteTournament
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: tournament ID
+      responses:
+        200:
+          description: OK
+
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -314,12 +411,55 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/User'
+    ApplicationPhase:
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+        from:
+          type: string
+          format: date
+        to:
+          type: string
+          format: date
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    TournamentData:
+      properties:
+        date:
+          type: string
+          format: date
+        name:
+          type: string
+        state:
+          type: string
+          enum: [nicht angemeldet, warteliste, fixstarter]
+        maxTeams:
+          type: integer
+        applicationPhases:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationPhase'
+    Tournament:
+      allOf:
+        - $ref: '#/components/schemas/TournamentData'
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: integer
+              format: int64
+              readOnly: true
 
     TrackerError:
       properties:
         type:
           type: string
           enum: [USER_NOT_FOUND, TOKEN_NOT_FOUND, TOKEN_ALREADY_USED, TOKEN_EXPIRED,
-                 UNABLE_TO_SEND_AUTHENTICATION_EMAIL, TRAINING_NOT_FOUND]
+                 UNABLE_TO_SEND_AUTHENTICATION_EMAIL, TRAINING_NOT_FOUND, TOURNAMENT_NOT_FOUND]
         message:
           type: string
