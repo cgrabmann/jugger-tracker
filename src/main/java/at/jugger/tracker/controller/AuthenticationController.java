@@ -2,6 +2,7 @@ package at.jugger.tracker.controller;
 
 import at.jugger.tracker.api.AuthenticationApiDelegate;
 import at.jugger.tracker.dto.User;
+import at.jugger.tracker.exceptions.JuggerTrackerException;
 import at.jugger.tracker.exceptions.UserNotFoundException;
 import at.jugger.tracker.service.AuthenticationService;
 import at.jugger.tracker.service.EmailService;
@@ -28,7 +29,11 @@ public class AuthenticationController implements AuthenticationApiDelegate {
 
     @Override
     public ResponseEntity<Void> authenticate(String tokenId) {
-        authenticationService.authenticate(tokenId);
+        try {
+            authenticationService.authenticate(tokenId);
+        } catch (JuggerTrackerException exception) {
+            return ResponseEntity.status(exception.getHttpStatus()).header("Location", "/#/login/" + exception.getErrorType().toString()).build();
+        }
         return ResponseEntity.status(HttpStatus.FOUND).header("Location", "/").build();
     }
 

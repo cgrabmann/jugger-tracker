@@ -44,7 +44,8 @@
                 <v-card-title class="headline">E-Mail verschickt</v-card-title>
 
                 <v-card-text>
-                    Unser persöhnliches Skynet hat dir eine <strong>E-Mail</strong> mit deinem <strong>Login Link</strong> geschickt.
+                    Unser persöhnliches Skynet hat dir eine <strong>E-Mail</strong> mit deinem <strong>Login
+                    Link</strong> geschickt.
                 </v-card-text>
 
                 <v-card-actions>
@@ -68,7 +69,24 @@
     import {AuthenticationAPI} from '../../api';
     import {TrackerError} from '@juggerApi'
 
-    @Component
+    @Component({
+        beforeRouteEnter(to, from, next) {
+            next((thiz) => {
+                if (to.params.error != null) {
+                    thiz.showError = true;
+                    thiz.errorMessage = thiz.$vuetify.t('$vuetify.errors.' + to.params.error);
+                }
+                next();
+            });
+        },
+        beforeRouteUpdate(to, from, next) {
+            if (to.params.error != null) {
+                this.showError = true;
+                this.errorMessage = this.$vuetify.t('$vuetify.errors.' + to.params.error);
+            }
+            next();
+        }
+    })
     export default class Login extends Vue {
 
         email: string = null;
@@ -79,14 +97,14 @@
         requestToken() {
             AuthenticationAPI.Instance.getAuthenticationAPI().requestLoginToken(this.email)
                 .then((response) => {
-                    this.showDialog = true;
-                },
-                (response: Response) => {
-                    return response.json().then((data: TrackerError) => {
-                        this.showError = true;
-                        this.errorMessage = data.message;
-                    });
-                })
+                        this.showDialog = true;
+                    },
+                    (response: Response) => {
+                        return response.json().then((data: TrackerError) => {
+                            this.showError = true;
+                            this.errorMessage = this.$vuetify.t('$vuetify.errors.' + data.type);
+                        });
+                    })
                 .catch(() => {
                     this.showError = true;
                     this.errorMessage = "E-Mail nicht gefunden";
