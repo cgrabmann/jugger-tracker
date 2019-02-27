@@ -4,7 +4,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,13 +28,17 @@ public class ApplicationPhaseEntity {
     @NonNull
     private Long applicationPhaseId;
 
-    @Column(name = "from", nullable = false)
+    @Column(name = "from_date", nullable = false)
     @NonNull
     private LocalDate from;
 
-    @Column(name = "to", nullable = false)
+    @Column(name = "to_date", nullable = false)
     @NonNull
     private LocalDate to;
+
+    @ManyToOne
+    @JoinColumn(name = "tournament_id")
+    private TournamentEntity tournament;
 
     @ManyToMany
     @JoinTable(name = "user_applies_for_phase",

@@ -103,7 +103,7 @@
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
             <column name="name" type="char(40)">
-                <constraints nullable="false" unique="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="date" type="datetime">
                 <constraints nullable="false"/>
@@ -117,10 +117,10 @@
             <column name="application_phase_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
-            <column name="from" type="datetime">
+            <column name="from_date" type="datetime">
                 <constraints nullable="false"/>
             </column>
-            <column name="to" type="datetime">
+            <column name="to_date" type="datetime">
                 <constraints nullable="false"/>
             </column>
             <column name="tournament_id" type="int">
