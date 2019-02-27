@@ -10,4 +10,6 @@ public interface AuthenticationService {
     LoginToken createLoginToken(User userEntity);
 
     void authenticate(String tokenId) throws TokenNotFoundException, TokenAlreadyUsedException, TokenExpiredException;
+
+    void logout();
 }

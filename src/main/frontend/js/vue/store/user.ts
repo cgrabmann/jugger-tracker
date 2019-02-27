@@ -57,5 +57,10 @@ export const UserModule: Module<UserState, RootState> = {
         currentUserLoaded(state, user: User) {
             state.currentUser = user;
         }
+    },
+    getters: {
+        isLoggedIn(state): boolean {
+            return state.currentUser != null;
+        }
     }
 };

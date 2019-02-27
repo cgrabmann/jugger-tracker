@@ -163,6 +163,15 @@ paths:
         200:
           description: OK
 
+  /api/authentication/logout:
+    post:
+      tags:
+        - Authentication
+      summary: logout
+      operationId: logout
+      responses:
+        200:
+          description: OK
 
   /api/trainings:
     get:

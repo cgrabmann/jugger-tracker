@@ -33,6 +33,12 @@ public class AuthenticationController implements AuthenticationApiDelegate {
     }
 
     @Override
+    public ResponseEntity<Void> logout() {
+        authenticationService.logout();
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
     public ResponseEntity<Void> requestLoginToken(String email) {
         User user = userService.getUserByEmail(email);
 

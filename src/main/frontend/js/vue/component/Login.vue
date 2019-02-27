@@ -7,7 +7,7 @@
             </v-toolbar-title>
             <v-spacer></v-spacer>
         </v-toolbar>
-        <v-form>
+        <v-form @submit.prevent="requestToken()">
             <v-container fluid>
                 <v-layout column>
                     <v-flex>

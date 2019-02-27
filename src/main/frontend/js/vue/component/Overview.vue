@@ -11,7 +11,8 @@
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn round
-                   color="primary">
+                   color="primary"
+                   @click="logout()">
                 abmelden
             </v-btn>
         </v-toolbar>
@@ -21,9 +22,18 @@
 <script lang="ts">
     import Vue from 'vue';
     import Component from 'vue-class-component';
+    import {AuthenticationAPI} from '../../api';
 
     @Component
     export default class Overview extends Vue {
+
+        logout() {
+            AuthenticationAPI.Instance.getAuthenticationAPI().logout()
+                .then(() => {
+                    this.$root.$store.state.UserModule.currentUser = null;
+                    this.$router.push('/login');
+                });
+        }
 
     }
 </script>
