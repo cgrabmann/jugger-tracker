@@ -43,7 +43,7 @@
                 <v-card-title class="headline">E-Mail verschickt</v-card-title>
 
                 <v-card-text>
-                    Unser persöhnliches Skynet hat dir eine <b>E-Mail</b> mit deinem <b>Login Link</b> geschickt.
+                    Unser persöhnliches Skynet hat dir eine <strong>E-Mail</strong> mit deinem <strong>Login Link</strong> geschickt.
                 </v-card-text>
 
                 <v-card-actions>
