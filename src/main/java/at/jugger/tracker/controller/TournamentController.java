@@ -3,11 +3,10 @@ package at.jugger.tracker.controller;
 import at.jugger.tracker.api.TournamentApiDelegate;
 import at.jugger.tracker.dto.Tournament;
 import at.jugger.tracker.dto.TournamentData;
+import at.jugger.tracker.exceptions.TournamentNotFoundException;
 import at.jugger.tracker.service.TournamentService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -24,9 +23,11 @@ public class TournamentController implements TournamentApiDelegate {
     @Override
     public ResponseEntity<Tournament> getTournament(@NotNull Long id) {
         Tournament tournament = tournamentService.getTournament(id);
+
         if (tournament == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new TournamentNotFoundException("id", Long.toString(id));
         }
+
         return ResponseEntity.ok(tournamentService.getTournament(id));
     }
 

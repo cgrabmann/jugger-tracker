@@ -3,6 +3,7 @@ package at.jugger.tracker.service.impl;
 import at.jugger.tracker.domain.TournamentEntity;
 import at.jugger.tracker.dto.Tournament;
 import at.jugger.tracker.dto.TournamentData;
+import at.jugger.tracker.exceptions.TournamentNotFoundException;
 import at.jugger.tracker.mapper.TournamentCreateMapper;
 import at.jugger.tracker.mapper.TournamentUpdateMapper;
 import at.jugger.tracker.repository.TournamentRepository;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class TournamentServiceImpl implements TournamentService {
@@ -47,10 +47,11 @@ public class TournamentServiceImpl implements TournamentService {
 
     @Override
     public @NotNull Tournament updateTournament(Long id, TournamentData tournament) {
-        TournamentEntity tournamentEntity = Objects.requireNonNull(
-                tournamentRepository.findByTournamentId(id),
-                "Tournament with ID '" + id + "' not fund."
-        );
+        TournamentEntity tournamentEntity = tournamentRepository.findByTournamentId(id);
+
+        if (tournamentEntity == null) {
+            throw new TournamentNotFoundException("id", Long.toString(id));
+        }
 
         tournamentEntity = tournamentUpdateMapper.toEntity(tournament, tournamentEntity);
         tournamentEntity = tournamentRepository.save(tournamentEntity);
