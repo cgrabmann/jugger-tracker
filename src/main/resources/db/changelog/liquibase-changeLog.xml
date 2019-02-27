@@ -109,8 +109,10 @@
                 <constraints nullable="false"/>
             </column>
             <column name="state" type="varchar(20)">
+                <constraints nullable="true"/>
             </column>
             <column name="max_teams" type="int">
+                <constraints nullable="true"/>
             </column>
         </createTable>
         <createTable tableName="application_phase">
