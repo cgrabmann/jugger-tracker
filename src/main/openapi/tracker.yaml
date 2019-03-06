@@ -396,7 +396,7 @@ components:
           type: boolean
         role:
           type: string
-          enum: [mitglied, trainer, admin]
+          enum: [MITGLIED, TRAINER, ADMIN]
     User:
       allOf:
         - $ref: '#/components/schemas/UserData'

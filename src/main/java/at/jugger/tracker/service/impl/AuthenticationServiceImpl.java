@@ -11,10 +11,12 @@ import at.jugger.tracker.repository.LoginTokenRepository;
 import at.jugger.tracker.service.AuthenticationService;
 import at.jugger.tracker.service.dto.LoginToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.UUID;
 
 @Service
@@ -25,7 +27,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserMapper userMapper;
     private final LoginTokenMapper loginTokenMapper;
 
-    AuthenticationServiceImpl(LoginTokenRepository loginTokenRepository, UserMapper userMapper, LoginTokenMapper loginTokenMapper) {
+    AuthenticationServiceImpl(
+            LoginTokenRepository loginTokenRepository, UserMapper userMapper, LoginTokenMapper loginTokenMapper
+    ) {
         this.loginTokenRepository = loginTokenRepository;
         this.userMapper = userMapper;
         this.loginTokenMapper = loginTokenMapper;
@@ -54,7 +58,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public void authenticate(String token) throws TokenNotFoundException, TokenAlreadyUsedException, TokenExpiredException {
+    public void authenticate(
+            String token
+    ) throws TokenNotFoundException, TokenAlreadyUsedException, TokenExpiredException {
         LoginTokenEntity loginToken = loginTokenRepository.findByToken(token);
         TokenState tokenState = getTokenState(loginToken);
 
@@ -77,7 +83,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     private void createSession(User user) {
-        UsernamePasswordAuthenticationToken springToken = new UsernamePasswordAuthenticationToken(user.getEmail(), "");
+        UsernamePasswordAuthenticationToken springToken = new UsernamePasswordAuthenticationToken(
+                user.getEmail(), "", Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name())));
         springToken.setDetails(user);
         SecurityContextHolder.getContext().setAuthentication(springToken);
     }
