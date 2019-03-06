@@ -8,7 +8,9 @@
             <v-container fluid>
                 <v-layout column
                           justify-space-around>
-                    <ErrorMessage :errorMessageData="errorMessageData"/>
+                    <v-flex>
+                        <ErrorMessage :errorMessageData="errorMessageData"/>
+                    </v-flex>
                     <v-flex>
                         <v-text-field v-model="user.firstName"
                                       :counter="20"
@@ -80,21 +82,25 @@
     import {Namespace} from '../store/namespace';
     import {UserState} from '../store/types';
     import {TrackerError, User, UserData} from 'juggerApi'
-    import {ErrorMessageData} from "./ErrorMessage.vue";
+    import ErrorMessage, {ErrorMessageData} from "./ErrorMessage.vue";
 
     @Component({
+        components: {ErrorMessage},
         beforeRouteEnter(to, from, next) {
             const id = to.params.id;
             if (isNaN(Number(id)) && id !== 'new') {
                 next({path: '/error'});
             } else {
                 next(vm => {
-                    vm.openNew(to.params.id);
-                    next();
-                });
+                        vm.errorMessageData = null;
+                        vm.openNew(to.params.id);
+                        next();
+                    }
+                );
             }
         },
         beforeRouteUpdate(to, from, next) {
+            this.errorMessageData = null;
             const id = to.params.id;
             if (isNaN(Number(id)) && id !== 'new') {
                 next({path: '/error'});
