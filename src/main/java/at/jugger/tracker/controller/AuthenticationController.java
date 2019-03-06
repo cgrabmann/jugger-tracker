@@ -32,7 +32,7 @@ public class AuthenticationController implements AuthenticationApiDelegate {
         try {
             authenticationService.authenticate(tokenId);
         } catch (JuggerTrackerException exception) {
-            return ResponseEntity.status(exception.getHttpStatus()).header("Location", "/#/login/" + exception.getErrorType().toString()).build();
+            return ResponseEntity.status(HttpStatus.FOUND).header("Location", "/#/login/" + exception.getErrorType().toString()).build();
         }
         return ResponseEntity.status(HttpStatus.FOUND).header("Location", "/").build();
     }

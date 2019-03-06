@@ -97,5 +97,8 @@
             <dropTable tableName="login_token"/>
         </rollback>
     </changeSet>
+    <changeSet id="6" author="Dodo">
+        <addUniqueConstraint tableName="user" columnNames="email"/>
+    </changeSet>
 
 </databaseChangeLog>
