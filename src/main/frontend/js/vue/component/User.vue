@@ -8,6 +8,7 @@
             <v-container fluid>
                 <v-layout column
                           justify-space-around>
+                    <ErrorMessage :errorMessageData="errorMessageData"/>
                     <v-flex>
                         <v-text-field v-model="user.firstName"
                                       :counter="20"
@@ -74,7 +75,8 @@
     import {Action, State} from 'vuex-class';
     import {Namespace} from '../store/namespace';
     import {UserState} from '../store/types';
-    import {User, UserData} from 'juggerApi'
+    import {TrackerError, User, UserData} from 'juggerApi'
+    import {ErrorMessageData} from "./ErrorMessage.vue";
 
     @Component({
         beforeRouteEnter(to, from, next) {
@@ -107,6 +109,7 @@
         valid: boolean = false;
         id: (string | number) = null;
         saving: boolean = false;
+        errorMessageData: ErrorMessageData = null;
 
         openNew(id: (string | number)) {
             this.userState.editUser = {
@@ -131,8 +134,13 @@
                 promise = this.updateUser(this.user);
             }
             promise.then(() => {
-                this.$router.push('/user')
-            }).finally(() => {
+                    this.$router.push('/user')
+                },
+                (response: Response) => {
+                    return response.json().then((data: TrackerError) => {
+                        this.errorMessageData = ErrorMessageData.fromTrackerError(this.$vuetify, data);
+                    });
+                }).finally(() => {
                 this.saving = false;
             })
         }

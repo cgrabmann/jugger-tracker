@@ -17,5 +17,13 @@ export default {
             trainer: 'Trainer',
             admin: 'Admin',
         }
+    },
+    errors: {
+        USER_NOT_FOUND: "Mitglied nicht gefunden.",
+        TOKEN_NOT_FOUND: "Login-Token nicht gefunden.",
+        TOKEN_ALREADY_USED: "Der Login-Token wurde bereits benutzt. Bitte fordere einen neuen an.",
+        TOKEN_EXPIRED: "Der Login-Token ist abgelaufen. Bitte fordere einen neuen an.",
+        UNABLE_TO_SEND_AUTHENTICATION_EMAIL: "Die Login-Email konnte nicht versendet werden. Bitte erneut versuchen.",
+        TRAINING_NOT_FOUND: "Training nicht gefunden."
     }
 }

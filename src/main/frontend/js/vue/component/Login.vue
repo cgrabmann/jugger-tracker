@@ -11,13 +11,7 @@
             <v-container fluid>
                 <v-layout column>
                     <v-flex>
-                        <v-alert
-                                v-model="showError"
-                                type="error"
-                                dismissible
-                        >
-                            {{ errorMessage }}
-                        </v-alert>
+                        <ErrorMessage v-model="errorMessageData"/>
                     </v-flex>
                     <v-flex>
                         <v-text-field v-model="email"
@@ -44,7 +38,8 @@
                 <v-card-title class="headline">E-Mail verschickt</v-card-title>
 
                 <v-card-text>
-                    Unser persöhnliches Skynet hat dir eine <strong>E-Mail</strong> mit deinem <strong>Login Link</strong> geschickt.
+                    Unser persönliches Skynet hat dir eine <strong>E-Mail</strong> mit deinem <strong>Login
+                    Link</strong> geschickt.
                 </v-card-text>
 
                 <v-card-actions>
@@ -67,30 +62,47 @@
     import Component from 'vue-class-component';
     import {AuthenticationAPI} from '../../api';
     import {TrackerError} from '@juggerApi'
+    import ErrorMessage, {ErrorMessageData} from "./ErrorMessage.vue";
 
-    @Component
+    @Component({
+            components: {ErrorMessage},
+            beforeRouteEnter(to, from, next) {
+                next((thiz: Login) => {
+                    if (to.params.error != null) {
+                        thiz.errorMessageData = ErrorMessageData.fromErrorType(thiz.$vuetify, to.params.error);
+                    }
+                    next();
+                });
+            }
+            ,
+            beforeRouteUpdate(to, from, next) {
+                if (to.params.error != null) {
+                    this.errorMessageData = ErrorMessageData.fromErrorType(this.$vuetify, to.params.error);
+                }
+                next();
+            }
+        }
+    )
     export default class Login extends Vue {
 
         email: string = null;
         showDialog: boolean = false;
-        showError: boolean = false;
-        errorMessage: string = null;
+        errorMessageData: ErrorMessageData = null;
 
         requestToken() {
             AuthenticationAPI.Instance.getAuthenticationAPI().requestLoginToken(this.email)
                 .then((response) => {
-                    this.showDialog = true;
-                },
-                (response: Response) => {
-                    return response.json().then((data: TrackerError) => {
-                        this.showError = true;
-                        this.errorMessage = data.message;
-                    });
-                })
+                        this.errorMessageData = null;
+                        this.showDialog = true;
+                    },
+                    (response: Response) => {
+                        return response.json().then((data: TrackerError) => {
+                            this.errorMessageData = ErrorMessageData.fromTrackerError(this.$vuetify, data);
+                        });
+                    })
                 .catch(() => {
-                    this.showError = true;
-                    this.errorMessage = "E-Mail nicht gefunden";
-                })
+                    this.errorMessageData = ErrorMessageData.fromErrorText("E-Mail nicht gefunden");
+                });
         }
 
     }
