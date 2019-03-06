@@ -14,6 +14,7 @@
     import Component from 'vue-class-component';
     import {TrackerError} from '@juggerApi'
     import {Model} from "vue-property-decorator";
+    import {VuetifyObject} from "vuetify";
 
     @Component
     export default class ErrorMessage extends Vue {
@@ -36,21 +37,21 @@
     export class ErrorMessageData {
         errorMessage: string;
 
-        public static fromTrackerError(component: Vue, trackerError: TrackerError): ErrorMessageData {
-            return new ErrorMessageData(component, null, trackerError.type);
+        public static fromTrackerError(vuetifyObject: VuetifyObject, trackerError: TrackerError): ErrorMessageData {
+            return new ErrorMessageData(vuetifyObject, null, trackerError.type);
         }
 
         public static fromErrorText(errorMessage: string): ErrorMessageData {
             return new ErrorMessageData(null, errorMessage, null);
         }
 
-        public static fromErrorType(component: Vue, errorType: TrackerError.TypeEnum): ErrorMessageData {
-            return new ErrorMessageData(component, null, errorType);
+        public static fromErrorType(vuetifyObject: VuetifyObject, errorType: TrackerError.TypeEnum): ErrorMessageData {
+            return new ErrorMessageData(vuetifyObject, null, errorType);
         }
 
-        constructor(component: Vue, errorMessage: string, errorType: TrackerError.TypeEnum) {
+        constructor(vuetifyObject: VuetifyObject, errorMessage: string, errorType: TrackerError.TypeEnum) {
             if (errorType != null) {
-                this.errorMessage = component.$vuetify.t('$vuetify.errors.' + errorType);
+                this.errorMessage = vuetifyObject.t('$vuetify.errors.' + errorType);
             } else {
                 this.errorMessage = errorMessage;
             }

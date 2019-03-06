@@ -138,7 +138,7 @@
                 },
                 (response: Response) => {
                     return response.json().then((data: TrackerError) => {
-                        this.errorMessageData = ErrorMessageData.fromTrackerError(this, data);
+                        this.errorMessageData = ErrorMessageData.fromTrackerError(this.$vuetify, data);
                     });
                 }).finally(() => {
                 this.saving = false;

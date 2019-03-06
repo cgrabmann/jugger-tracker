@@ -69,7 +69,7 @@
             beforeRouteEnter(to, from, next) {
                 next((thiz: Login) => {
                     if (to.params.error != null) {
-                        thiz.errorMessageData = ErrorMessageData.fromErrorType(thiz, to.params.error);
+                        thiz.errorMessageData = ErrorMessageData.fromErrorType(thiz.$vuetify, to.params.error);
                     }
                     next();
                 });
@@ -77,7 +77,7 @@
             ,
             beforeRouteUpdate(to, from, next) {
                 if (to.params.error != null) {
-                    this.errorMessageData = ErrorMessageData.fromErrorType(this, to.params.error);
+                    this.errorMessageData = ErrorMessageData.fromErrorType(this.$vuetify, to.params.error);
                 }
                 next();
             }
@@ -97,10 +97,10 @@
                     },
                     (response: Response) => {
                         return response.json().then((data: TrackerError) => {
-                            this.errorMessageData = ErrorMessageData.fromTrackerError(this, data);
+                            this.errorMessageData = ErrorMessageData.fromTrackerError(this.$vuetify, data);
                         });
                     })
-                .catch((ex: any) => {
+                .catch(() => {
                     this.errorMessageData = ErrorMessageData.fromErrorText("E-Mail nicht gefunden");
                 });
         }
