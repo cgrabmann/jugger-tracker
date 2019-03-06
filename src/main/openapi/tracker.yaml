@@ -469,6 +469,7 @@ components:
         type:
           type: string
           enum: [USER_NOT_FOUND, TOKEN_NOT_FOUND, TOKEN_ALREADY_USED, TOKEN_EXPIRED,
-                 UNABLE_TO_SEND_AUTHENTICATION_EMAIL, TRAINING_NOT_FOUND, TOURNAMENT_NOT_FOUND]
+                 UNABLE_TO_SEND_AUTHENTICATION_EMAIL, TRAINING_NOT_FOUND, TOURNAMENT_NOT_FOUND, EMAIL_ALREADY_IN_USE,
+                 INTERNAL_SERVER_ERROR]
         message:
           type: string
