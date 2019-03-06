@@ -146,5 +146,8 @@
             <dropTable tableName="tournament"/>
         </rollback>
     </changeSet>
+    <changeSet id="7" author="Dodo">
+        <addUniqueConstraint tableName="user" columnNames="email"/>
+    </changeSet>
 
 </databaseChangeLog>

@@ -11,13 +11,7 @@
             <v-container fluid>
                 <v-layout column>
                     <v-flex>
-                        <v-alert
-                                v-model="showError"
-                                type="error"
-                                dismissible
-                        >
-                            {{ errorMessage }}
-                        </v-alert>
+                        <ErrorMessage :errorMessageData="errorMessageData"/>
                     </v-flex>
                     <v-flex>
                         <v-text-field v-model="email"
@@ -44,7 +38,7 @@
                 <v-card-title class="headline">E-Mail verschickt</v-card-title>
 
                 <v-card-text>
-                    Unser persöhnliches Skynet hat dir eine <strong>E-Mail</strong> mit deinem <strong>Login
+                    Unser persönliches Skynet hat dir eine <strong>E-Mail</strong> mit deinem <strong>Login
                     Link</strong> geschickt.
                 </v-card-text>
 
@@ -68,47 +62,47 @@
     import Component from 'vue-class-component';
     import {AuthenticationAPI} from '../../api';
     import {TrackerError} from '@juggerApi'
+    import ErrorMessage, {ErrorMessageData} from "./ErrorMessage.vue";
 
     @Component({
-        beforeRouteEnter(to, from, next) {
-            next((thiz) => {
+            components: {ErrorMessage},
+            beforeRouteEnter(to, from, next) {
+                next((thiz: Login) => {
+                    if (to.params.error != null) {
+                        thiz.errorMessageData.showErrorType(to.params.error);
+                    }
+                    next();
+                });
+            }
+            ,
+            beforeRouteUpdate(to, from, next) {
                 if (to.params.error != null) {
-                    thiz.showError = true;
-                    thiz.errorMessage = thiz.$vuetify.t('$vuetify.errors.' + to.params.error);
+                    this.errorMessageData.showErrorType(to.params.error);
                 }
                 next();
-            });
-        },
-        beforeRouteUpdate(to, from, next) {
-            if (to.params.error != null) {
-                this.showError = true;
-                this.errorMessage = this.$vuetify.t('$vuetify.errors.' + to.params.error);
             }
-            next();
         }
-    })
+    )
     export default class Login extends Vue {
 
         email: string = null;
         showDialog: boolean = false;
-        showError: boolean = false;
-        errorMessage: string = null;
+        errorMessageData: ErrorMessageData;
 
         requestToken() {
             AuthenticationAPI.Instance.getAuthenticationAPI().requestLoginToken(this.email)
                 .then((response) => {
+                        this.errorMessageData.hide();
                         this.showDialog = true;
                     },
                     (response: Response) => {
                         return response.json().then((data: TrackerError) => {
-                            this.showError = true;
-                            this.errorMessage = this.$vuetify.t('$vuetify.errors.' + data.type);
+                            this.errorMessageData.showTrackerError(data);
                         });
                     })
                 .catch(() => {
-                    this.showError = true;
-                    this.errorMessage = "E-Mail nicht gefunden";
-                })
+                    this.errorMessageData.showErrorText("E-Mail nicht gefunden");
+                });
         }
 
     }
