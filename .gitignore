@@ -1,5 +1,6 @@
-turniere.log
-turniere-tests.log
+turniere.log*
+turniere-tests.log*
+yarn-error.log*
 .gradle
 /build/
 /node_modules/
