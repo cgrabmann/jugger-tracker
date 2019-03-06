@@ -11,7 +11,7 @@
             <v-container fluid>
                 <v-layout column>
                     <v-flex>
-                        <ErrorMessage :errorMessageData="errorMessageData"/>
+                        <ErrorMessage v-model="errorMessageData"/>
                     </v-flex>
                     <v-flex>
                         <v-text-field v-model="email"
@@ -69,7 +69,7 @@
             beforeRouteEnter(to, from, next) {
                 next((thiz: Login) => {
                     if (to.params.error != null) {
-                        thiz.errorMessageData.showErrorType(to.params.error);
+                        thiz.errorMessageData = ErrorMessageData.fromErrorType(thiz, to.params.error);
                     }
                     next();
                 });
@@ -77,7 +77,7 @@
             ,
             beforeRouteUpdate(to, from, next) {
                 if (to.params.error != null) {
-                    this.errorMessageData.showErrorType(to.params.error);
+                    this.errorMessageData = ErrorMessageData.fromErrorType(this, to.params.error);
                 }
                 next();
             }
@@ -87,21 +87,21 @@
 
         email: string = null;
         showDialog: boolean = false;
-        errorMessageData: ErrorMessageData;
+        errorMessageData: ErrorMessageData = null;
 
         requestToken() {
             AuthenticationAPI.Instance.getAuthenticationAPI().requestLoginToken(this.email)
                 .then((response) => {
-                        this.errorMessageData.hide();
+                        this.errorMessageData = null;
                         this.showDialog = true;
                     },
                     (response: Response) => {
                         return response.json().then((data: TrackerError) => {
-                            this.errorMessageData.showTrackerError(data);
+                            this.errorMessageData = ErrorMessageData.fromTrackerError(this, data);
                         });
                     })
-                .catch(() => {
-                    this.errorMessageData.showErrorText("E-Mail nicht gefunden");
+                .catch((ex: any) => {
+                    this.errorMessageData = ErrorMessageData.fromErrorText("E-Mail nicht gefunden");
                 });
         }
 

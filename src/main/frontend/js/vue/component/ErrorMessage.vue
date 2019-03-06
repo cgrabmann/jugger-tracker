@@ -1,10 +1,11 @@
 <template>
     <v-alert
-            :value="errorMessageData.isErrorShown"
+            :value="isErrorShown"
             type="error"
             dismissible
+            @input="reset()"
     >
-        {{ errorMessageData.shownErrorMessage }}
+        {{ shownErrorMessage }}
     </v-alert>
 </template>
 
@@ -12,43 +13,51 @@
     import Vue from 'vue';
     import Component from 'vue-class-component';
     import {TrackerError} from '@juggerApi'
-    import {Prop} from "vue-property-decorator";
+    import {Model} from "vue-property-decorator";
 
     @Component
     export default class ErrorMessage extends Vue {
 
-        @Prop({default: null}) errorMessageData: ErrorMessageData;
+        @Model('change') errorMessageData: ErrorMessageData;
+
+        reset() {
+            this.errorMessageData = null
+        }
+
+        get isErrorShown(): boolean {
+            return this.errorMessageData != null;
+        }
+
+        get shownErrorMessage(): string {
+            return this.errorMessageData != null ? this.errorMessageData.shownErrorMessage : "";
+        }
     }
 
     export class ErrorMessageData {
-        showError: boolean;
         errorMessage: string;
 
-        get isErrorShown(): boolean {
-            return this.showError;
+        public static fromTrackerError(component: Vue, trackerError: TrackerError): ErrorMessageData {
+            return new ErrorMessageData(component, null, trackerError.type);
+        }
+
+        public static fromErrorText(errorMessage: string): ErrorMessageData {
+            return new ErrorMessageData(null, errorMessage, null);
+        }
+
+        public static fromErrorType(component: Vue, errorType: TrackerError.TypeEnum): ErrorMessageData {
+            return new ErrorMessageData(component, null, errorType);
+        }
+
+        constructor(component: Vue, errorMessage: string, errorType: TrackerError.TypeEnum) {
+            if (errorType != null) {
+                this.errorMessage = component.$vuetify.t('$vuetify.errors.' + errorType);
+            } else {
+                this.errorMessage = errorMessage;
+            }
         }
 
         get shownErrorMessage(): string {
             return this.errorMessage;
-        }
-
-        showErrorType(errorType: TrackerError.TypeEnum): void {
-            this.showError = true;
-            this.errorMessage = Vue.$vuetify.t('$vuetify.errors.' + errorType);
-        }
-
-        showErrorText(errorText: string): void {
-            this.showError = true;
-            this.errorMessage = errorText;
-        }
-
-        showTrackerError(trackerError: TrackerError): void {
-            this.showError = true;
-            this.errorMessage = Vue.$vuetify.t('$vuetify.errors.' + trackerError.type);
-        }
-
-        hide(): void {
-            this.showError = false;
         }
     }
 </script>

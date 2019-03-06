@@ -75,7 +75,7 @@
     import {Action, State} from 'vuex-class';
     import {Namespace} from '../store/namespace';
     import {UserState} from '../store/types';
-    import {TrackerError, User, UserData} from '@juggerApi'
+    import {TrackerError, User, UserData} from 'juggerApi'
     import {ErrorMessageData} from "./ErrorMessage.vue";
 
     @Component({
@@ -109,7 +109,7 @@
         valid: boolean = false;
         id: (string | number) = null;
         saving: boolean = false;
-        errorMessageData: ErrorMessageData;
+        errorMessageData: ErrorMessageData = null;
 
         openNew(id: (string | number)) {
             this.userState.editUser = {
@@ -138,7 +138,7 @@
                 },
                 (response: Response) => {
                     return response.json().then((data: TrackerError) => {
-                        this.errorMessageData.showTrackerError(data);
+                        this.errorMessageData = ErrorMessageData.fromTrackerError(this, data);
                     });
                 }).finally(() => {
                 this.saving = false;
