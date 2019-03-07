@@ -13,9 +13,9 @@ export default {
     noDataText: 'Keine Daten vorhanden',
     user: {
         roles: {
-            mitglied: 'Mitglied',
-            trainer: 'Trainer',
-            admin: 'Admin',
+            MITGLIED: 'Mitglied',
+            TRAINER: 'Trainer',
+            ADMIN: 'Admin',
         }
     }
 }

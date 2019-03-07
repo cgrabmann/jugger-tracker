@@ -3,11 +3,7 @@ package at.jugger.tracker.mapper;
 import at.jugger.tracker.config.MapperConfig;
 import at.jugger.tracker.domain.ApplicationPhaseEntity;
 import at.jugger.tracker.dto.ApplicationPhase;
-import org.mapstruct.InheritInverseConfiguration;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
+import org.mapstruct.*;
 
 import java.util.List;
 

@@ -72,7 +72,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             case EXPIRED:
                 throw new TokenExpiredException(loginTokenMapper.toDto(loginToken));
             case VALID:
-                createSession(userMapper.toDto(loginToken.getUser()));
+                createSession(loginToken);
                 useToken(loginToken);
         }
     }
@@ -82,11 +82,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         SecurityContextHolder.getContext().setAuthentication(null);
     }
 
-    private void createSession(User user) {
+    private void createSession(LoginTokenEntity loginTokenEntity) {
         UsernamePasswordAuthenticationToken springToken = new UsernamePasswordAuthenticationToken(
-                user.getEmail(), "", Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name())));
-        springToken.setDetails(user);
+                loginTokenEntity.getUser().getEmail(), "", Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + loginTokenEntity.getUser().getRole())));
         SecurityContextHolder.getContext().setAuthentication(springToken);
+        springToken.setDetails(userMapper.toDto(loginTokenEntity.getUser()));
     }
 
     private void useToken(LoginTokenEntity loginTokenEntity) {
