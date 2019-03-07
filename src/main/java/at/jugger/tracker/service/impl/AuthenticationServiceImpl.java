@@ -58,9 +58,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public void authenticate(
-            String token
-    ) throws TokenNotFoundException, TokenAlreadyUsedException, TokenExpiredException {
+    public void authenticate(String token)
+            throws TokenNotFoundException, TokenAlreadyUsedException, TokenExpiredException {
         LoginTokenEntity loginToken = loginTokenRepository.findByToken(token);
         TokenState tokenState = getTokenState(loginToken);
 

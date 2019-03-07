@@ -7,10 +7,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SecurityServiceImpl implements SecurityService {
+
+    private static final String AUTHORITY_ROLE_PREFIX = "ROLE_";
+
     @Override
     public boolean currentUserHasRole(String role) {
         return SecurityContextHolder.getContext().getAuthentication().getAuthorities()
-                                    .stream().anyMatch(a -> a.getAuthority().equals("ROLE_" + role));
+                                    .stream().anyMatch(a -> a.getAuthority().equals(AUTHORITY_ROLE_PREFIX + role));
     }
 
     @Override
