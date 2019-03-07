@@ -146,7 +146,10 @@
             <dropTable tableName="tournament"/>
         </rollback>
     </changeSet>
-    <changeSet id="7" author="Clemens">
+    <changeSet id="7" author="Dodo">
+        <addUniqueConstraint tableName="user" columnNames="email"/>
+    </changeSet>
+    <changeSet id="8" author="Clemens">
         <update tableName="user">
             <column name="role" value="MITGLIED"/>
             <where>

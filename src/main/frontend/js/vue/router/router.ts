@@ -55,7 +55,7 @@ const router = new Router({
                 requiresAuth: true
             }
         }, {
-            path: '/login',
+            path: '/login/:error?',
             component: Login,
             meta: {
                 breadcrumb: 'Login'
