@@ -37,7 +37,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         }
 
         UnhandledDataIntegrityViolationException unhandledDataIntegrityViolationException = new UnhandledDataIntegrityViolationException(exception);
-        processJuggerTrackerException(unhandledDataIntegrityViolationException, request);
+        return processJuggerTrackerException(unhandledDataIntegrityViolationException, request);
     }
 
     private ResponseEntity<Object> processJuggerTrackerException(JuggerTrackerException exception, WebRequest request) {

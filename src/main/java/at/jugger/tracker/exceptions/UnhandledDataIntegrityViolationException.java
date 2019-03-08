@@ -2,6 +2,7 @@ package at.jugger.tracker.exceptions;
 
 import at.jugger.tracker.dto.TrackerError;
 import lombok.Getter;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 
@@ -19,12 +20,12 @@ public class UnhandledDataIntegrityViolationException extends JuggerTrackerExcep
 
     @Override
     public HttpStatus getHttpStatus() {
-        return HttpStatus.NOT_FOUND;
+        return HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
     @Override
     public TrackerError.TypeEnum getErrorType() {
-        return TrackerError.TypeEnum.USER_NOT_FOUND;
+        return TrackerError.TypeEnum.INTERNAL_SERVER_ERROR;
     }
 
     @Override
@@ -32,6 +33,14 @@ public class UnhandledDataIntegrityViolationException extends JuggerTrackerExcep
         StringWriter sw = new StringWriter();
         dataIntegrityViolationException.printStackTrace(new PrintWriter(sw));
         String exceptionAsString = sw.toString();
-        return "Unhandled data integrity violation exception: " + dataIntegrityViolationException.getMessage() + "\n" + exceptionAsString;
+
+        String contraintName = "<unknown constraint name>";
+        Throwable cause = dataIntegrityViolationException.getCause();
+        if (cause instanceof ConstraintViolationException) {
+            ConstraintViolationException constraintViolationException = (ConstraintViolationException) cause;
+            contraintName = constraintViolationException.getConstraintName();
+        }
+
+        return "Unhandled data integrity violation exception. Violated constraint: " + contraintName + "\n" + dataIntegrityViolationException.getMessage() + "\n" + exceptionAsString;
     }
 }

@@ -25,6 +25,7 @@ export default {
         TOKEN_EXPIRED: "Der Login-Token ist abgelaufen. Bitte fordere einen neuen an.",
         UNABLE_TO_SEND_AUTHENTICATION_EMAIL: "Die Login-Email konnte nicht versendet werden. Bitte erneut versuchen.",
         TRAINING_NOT_FOUND: "Training nicht gefunden.",
-        EMAIL_ALREADY_IN_USE: "Die angegebene Email-Adresse wird bereits benutzt."
+        EMAIL_ALREADY_IN_USE: "Die angegebene Email-Adresse wird bereits benutzt.",
+        INTERNAL_SERVER_ERROR: "Ein unerwarteter Fehler ist aufgetreten. Bitte kontaktiere Clemens oder Dodo."
     }
 }
