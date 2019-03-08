@@ -9,6 +9,9 @@
                 <v-layout column
                           justify-space-around>
                     <v-flex>
+                        <ErrorMessage v-model="errorMessageData"/>
+                    </v-flex>
+                    <v-flex>
                         <v-menu
                                 lazy
                                 :close-on-content-click="true"
@@ -91,10 +94,12 @@
     import {Namespace} from "../store/namespace";
     import {TrainingState, UserState} from "../store/types";
     import User from "./User.vue";
-    import {Training} from 'juggerApi';
+    import {TrackerError, Training} from 'juggerApi';
     import moment from 'moment';
+    import ErrorMessage, {ErrorMessageData} from "./ErrorMessage.vue";
 
     @Component({
+        components: {ErrorMessage},
         beforeRouteEnter(to, from, next) {
             const id = to.params.id;
             if (!moment(id, 'YYYY-MM-DD', true).isValid() && id !== 'new') {
@@ -131,6 +136,7 @@
         id: (string | number) = null;
         fab: boolean = false;
         saving: boolean = false;
+        errorMessageData: ErrorMessageData = null;
 
         openNew(id: (string | number)) {
             this.id = id;
@@ -159,10 +165,15 @@
             }
             promise.then(() => {
                     this.$router.push('/trainings');
+                },
+                (response: Response) => {
+                    return response.json().then((data: TrackerError) => {
+                        this.errorMessageData = ErrorMessageData.fromTrackerError(this.$vuetify, data);
+                    });
                 })
                 .finally(() => {
                     this.saving = false;
-                })
+                });
         }
 
         removeTraining() {
@@ -171,8 +182,13 @@
                 this.saving = true;
                 this.deleteTraining(this.id)
                     .then(() => {
-                        this.$router.push('/trainings')
-                    })
+                            this.$router.push('/trainings')
+                        },
+                        (response: Response) => {
+                            return response.json().then((data: TrackerError) => {
+                                this.errorMessageData = ErrorMessageData.fromTrackerError(this.$vuetify, data);
+                            });
+                        })
                     .finally(() => {
                         this.saving = false;
                     });

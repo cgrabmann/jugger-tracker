@@ -156,8 +156,13 @@
                 this.saving = true;
                 this.deleteUser(this.user.id)
                     .then(() => {
-                        this.$router.push('/user')
-                    })
+                            this.$router.push('/user')
+                        },
+                        (response: Response) => {
+                            return response.json().then((data: TrackerError) => {
+                                this.errorMessageData = ErrorMessageData.fromTrackerError(this.$vuetify, data);
+                            });
+                        })
                     .finally(() => {
                         this.saving = false;
                     });

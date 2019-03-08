@@ -44,10 +44,10 @@ public class EmailServiceImpl implements EmailService {
             message.setFrom(from);
             message.setRecipients(Message.RecipientType.TO, loginToken.getUser().getEmail());
             String subject = "Login beim Jugger Tracker von Jugger Vienna";
-            message.setSubject(subject);
+            message.setSubject(subject, "UTF-8");
 
             String htmlMsg = templateService.getAuthenticationEmailService(loginToken, authenticationUrl);
-            message.setContent(htmlMsg, "text/html");
+            message.setContent(htmlMsg, "text/html; charset=UTF-8");
 
             emailSender.send(message);
         } catch (MessagingException e) {
