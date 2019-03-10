@@ -8,7 +8,7 @@
             <v-container fluid>
                 <v-layout column
                           justify-space-around>
-                    <ErrorMessage :errorMessageData="errorMessageData"/>
+                    <ErrorMessage :errorMessageData="errorMessageData"></ErrorMessage>
                     <v-flex>
                         <v-text-field v-model="user.firstName"
                                       :counter="20"
@@ -58,7 +58,7 @@
                                round
                                dark
                                color="success"
-                               @click="saveUser()">
+                               @click="checkAndTriggerSaveUser()">
                             <v-icon left>save</v-icon>
                             Speichern
                         </v-btn>
@@ -66,6 +66,38 @@
                 </v-layout>
             </v-container>
         </v-form>
+        <v-dialog
+                v-model="showTrackableDeletionWarning"
+                max-width="450"
+        >
+            <v-card>
+                <v-card-title class="headline">Soll die Trainingsbeteiligung wirklich gelöscht werden?</v-card-title>
+
+                <v-card-text>
+                    Wenn die Einstellung "Trainingsbeteiligung aufzeichnen" entfernt wird, werden alle
+                    Trainingsbeteiligungen gelöscht. Dadurch wird dieses Mitglied sofort bei allen Anmeldungen nach
+                    hinten gereiht. Soll das wirklich geschehen?
+                </v-card-text>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                            color="secondary"
+                            flat="flat"
+                            @click="saveUser()"
+                    >
+                        Ja
+                    </v-btn>
+                    <v-btn
+                            color="primary"
+                            flat="flat"
+                            @click="showTrackableDeletionWarning = false"
+                    >
+                        Nein
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-card>
 </template>
 
@@ -76,9 +108,10 @@
     import {Namespace} from '../store/namespace';
     import {UserState} from '../store/types';
     import {TrackerError, User, UserData} from 'juggerApi'
-    import {ErrorMessageData} from "./ErrorMessage.vue";
+    import ErrorMessage, {ErrorMessageData} from "./ErrorMessage.vue";
 
     @Component({
+        components: {ErrorMessage},
         beforeRouteEnter(to, from, next) {
             const id = to.params.id;
             if (isNaN(Number(id)) && id !== 'new') {
@@ -106,10 +139,13 @@
         @Action('createUser', Namespace.USER) createUser;
         @Action('updateUser', Namespace.USER) updateUser;
         @Action('deleteUser', Namespace.USER) deleteUser;
+
         valid: boolean = false;
         id: (string | number) = null;
         saving: boolean = false;
         errorMessageData: ErrorMessageData = null;
+        wasTrackable: boolean = false;
+        showTrackableDeletionWarning: boolean = false;
 
         openNew(id: (string | number)) {
             this.userState.editUser = {
@@ -118,21 +154,36 @@
                 email: null,
                 trackable: true
             } as User;
+
             this.id = id;
             if (id !== "new") {
-                this.getUser(id);
+                this.getUser(id).then(() => {
+                    this.wasTrackable = this.user.trackable;
+                });
+            } else {
+                this.wasTrackable = false;
+            }
+        }
+
+        checkAndTriggerSaveUser() {
+            if (this.wasTrackable && !this.user.trackable) {
+                this.showTrackableDeletionWarning = true;
+            } else {
+                this.saveUser();
             }
         }
 
         saveUser() {
             this.fab = false;
             this.saving = true;
+
             let promise: Promise;
             if (this.id === 'new') {
                 promise = this.createUser(this.user);
             } else {
                 promise = this.updateUser(this.user);
             }
+
             promise.then(() => {
                     this.$router.push('/user')
                 },
