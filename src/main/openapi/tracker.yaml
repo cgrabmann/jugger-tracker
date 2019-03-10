@@ -5,9 +5,7 @@ info:
   version: 1.0.0
 
 servers:
-  - url: 'https://jugger.derletztedodo.at'
   - url: 'https://turniere.jugger.at'
-  - url: 'http://localhost:8080'
 
 security:
   - ApiKeyAuth: []

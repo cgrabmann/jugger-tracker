@@ -23,17 +23,13 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     protected ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException exception, WebRequest request) {
-        try {
-            Throwable cause = exception.getCause();
-            if (cause instanceof ConstraintViolationException) {
-                ConstraintViolationException constraintViolationException = (ConstraintViolationException) cause;
-                switch (constraintViolationException.getConstraintName()) {
-                    case "email":
-                        throw new EmailAlreadyInUseException("");
-                }
+        Throwable cause = exception.getCause();
+        if (cause instanceof ConstraintViolationException) {
+            ConstraintViolationException constraintViolationException = (ConstraintViolationException) cause;
+            switch (constraintViolationException.getConstraintName()) {
+                case "email":
+                    return processJuggerTrackerException(new EmailAlreadyInUseException(""), request);
             }
-        } catch (JuggerTrackerException juggerTrackerException) {
-            return processJuggerTrackerException(juggerTrackerException, request);
         }
 
         UnhandledDataIntegrityViolationException unhandledDataIntegrityViolationException = new UnhandledDataIntegrityViolationException(exception);
