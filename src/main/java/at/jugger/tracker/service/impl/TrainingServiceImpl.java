@@ -2,7 +2,9 @@ package at.jugger.tracker.service.impl;
 
 import at.jugger.tracker.domain.TrainingEntity;
 import at.jugger.tracker.dto.Training;
+import at.jugger.tracker.dto.User;
 import at.jugger.tracker.exceptions.TrainingNotFoundException;
+import at.jugger.tracker.exceptions.UserNotTrackableException;
 import at.jugger.tracker.mapper.TrainingMapper;
 import at.jugger.tracker.repository.TrainingRepository;
 import at.jugger.tracker.service.TrainingService;
@@ -36,12 +38,14 @@ public class TrainingServiceImpl implements TrainingService {
 
     @Override
     public @NotNull Training createTraining(@NotNull Training training) {
+        checkTrackableFieldAndThrow(training);
         TrainingEntity trainingEntity = trainingMapper.toEntity(training);
         return trainingMapper.toDto(trainingRepository.save(trainingEntity));
     }
 
     @Override
     public @NotNull Training updateTraining(@NotNull LocalDate date, @NotNull Training training) {
+        checkTrackableFieldAndThrow(training);
         TrainingEntity trainingEntity = trainingRepository.findByDate(date);
 
         if (trainingEntity == null) {
@@ -56,5 +60,13 @@ public class TrainingServiceImpl implements TrainingService {
     public void deleteTraining(@NotNull LocalDate date) {
         TrainingEntity trainingEntity = trainingRepository.findByDate(date);
         trainingRepository.delete(trainingEntity);
+    }
+
+    private void checkTrackableFieldAndThrow(Training training) {
+        for (User participant : training.getParticipants()) {
+            if (!participant.getTrackable()) {
+                throw new UserNotTrackableException(participant);
+            }
+        }
     }
 }

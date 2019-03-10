@@ -203,11 +203,12 @@
         }
 
         saveTraining() {
-            for (let user: User of this.trainingState.editTraining.participants) {
-                if (!user.trackable) {
-                    this.showTrackableDialog = true;
-                    return;
-                }
+            if (this.trainingState.editTraining.participants.some(
+                (user: User) => {
+                    return !user.trackable;
+                })) {
+                this.showTrackableDialog = true;
+                return;
             }
 
             this.fab = false;
