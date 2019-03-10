@@ -2,7 +2,9 @@ package at.jugger.tracker.controller;
 
 import at.jugger.tracker.api.TrainingApiDelegate;
 import at.jugger.tracker.dto.Training;
+import at.jugger.tracker.dto.User;
 import at.jugger.tracker.exceptions.TrainingNotFoundException;
+import at.jugger.tracker.exceptions.UserNotTrackableException;
 import at.jugger.tracker.service.TrainingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +23,7 @@ public class TrainingController implements TrainingApiDelegate {
 
     @Override
     public ResponseEntity<Training> createTraining(@NotNull Training training) {
+        checkTrackableFieldAndThrow(training);
         return ResponseEntity.ok(trainingService.createTraining(training));
     }
 
@@ -48,6 +51,15 @@ public class TrainingController implements TrainingApiDelegate {
 
     @Override
     public ResponseEntity<Training> updateTraining(@NotNull LocalDate date, @NotNull Training training) {
+        checkTrackableFieldAndThrow(training);
         return ResponseEntity.ok(trainingService.updateTraining(date, training));
+    }
+
+    private void checkTrackableFieldAndThrow(Training training) {
+        for (User participant : training.getParticipants()) {
+            if (!participant.getTrackable()) {
+                throw new UserNotTrackableException(participant);
+            }
+        }
     }
 }
