@@ -5,6 +5,7 @@ import at.jugger.tracker.dto.User;
 import at.jugger.tracker.dto.UserData;
 import at.jugger.tracker.exceptions.UserNotFoundException;
 import at.jugger.tracker.mapper.UserMapper;
+import at.jugger.tracker.repository.TrainingRepository;
 import at.jugger.tracker.repository.UserRepository;
 import at.jugger.tracker.service.UserService;
 import org.springframework.stereotype.Service;
@@ -17,10 +18,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final TrainingRepository trainingRepository;
 
-    UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    UserServiceImpl(UserRepository userRepository, UserMapper userMapper, TrainingRepository trainingRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.trainingRepository = trainingRepository;
     }
 
     @Override
@@ -63,6 +66,10 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException("id", Long.toString(id));
         }
 
+        if (userEntity.isTrackable() && !user.getTrackable()) {
+            trainingRepository.deleteAllParticipationsForUser(userEntity.getUserId());
+        }
+
         userEntity = userMapper.toEntity(user, userEntity);
         userEntity = userRepository.save(userEntity);
 
@@ -73,6 +80,4 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(@NotNull Long id) {
         userRepository.deleteById(id);
     }
-
-
 }
