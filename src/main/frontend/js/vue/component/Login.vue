@@ -15,7 +15,8 @@
                     </v-flex>
                     <v-flex>
                         <v-text-field v-model="email"
-                                      label="Email">
+                                      label="Email"
+                                      type="email">
                             Email
                         </v-text-field>
                     </v-flex>

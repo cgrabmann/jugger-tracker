@@ -21,6 +21,7 @@
                                     label="Datum"
                                     prepend-icon="event"
                                     :value="training.date"
+                                    browser-autocomplete="off"
                                     readonly
                             ></v-text-field>
                             <v-date-picker v-model="training.date"
@@ -34,6 +35,7 @@
                                 v-model="training.type"
                                 :items="trainingTypes"
                                 label="Typ"
+                                browser-autocomplete="off"
                         ></v-select>
                     </v-flex>
                     <v-flex>
@@ -41,6 +43,7 @@
                                   v-model="training.participants"
                                   item-value="id"
                                   label="Teilnehmer"
+                                  browser-autocomplete="off"
                                   multiple
                                   return-object>
                             <template slot="selection"

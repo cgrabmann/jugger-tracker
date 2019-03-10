@@ -149,5 +149,25 @@
     <changeSet id="7" author="Dodo">
         <addUniqueConstraint tableName="user" columnNames="email"/>
     </changeSet>
+    <changeSet id="8" author="Clemens">
+        <update tableName="user">
+            <column name="role" value="MITGLIED"/>
+            <where>
+                role = 'mitglied'
+            </where>
+        </update>
+        <update tableName="user">
+            <column name="role" value="TRAINER"/>
+            <where>
+                role = 'trainer'
+            </where>
+        </update>
+        <update tableName="user">
+            <column name="role" value="ADMIN"/>
+            <where>
+                role = 'admin'
+            </where>
+        </update>
+    </changeSet>
 
 </databaseChangeLog>

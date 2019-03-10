@@ -14,6 +14,7 @@
                                       :counter="20"
                                       :rules="nameRules"
                                       label="Vorname"
+                                      browser-autocomplete="off"
                                       required></v-text-field>
                     </v-flex>
                     <v-flex>
@@ -21,6 +22,7 @@
                                       :counter="20"
                                       :rules="nameRules"
                                       label="Nachname"
+                                      browser-autocomplete="off"
                                       required></v-text-field>
                     </v-flex>
                     <v-flex>
@@ -28,6 +30,7 @@
                                       :counter="50"
                                       :rules="emailRules"
                                       label="Email"
+                                      type="email"
                                       required></v-text-field>
                     </v-flex>
                     <v-flex>
@@ -37,6 +40,7 @@
                                 item-text="text"
                                 item-value="value"
                                 label="Rolle"
+                                browser-autocomplete="off"
                         ></v-select>
                     </v-flex>
                     <v-flex>

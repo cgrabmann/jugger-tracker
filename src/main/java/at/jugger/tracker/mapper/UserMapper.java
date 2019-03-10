@@ -4,15 +4,13 @@ import at.jugger.tracker.config.MapperConfig;
 import at.jugger.tracker.domain.UserEntity;
 import at.jugger.tracker.dto.User;
 import at.jugger.tracker.dto.UserData;
-import org.mapstruct.InheritInverseConfiguration;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
+import at.jugger.tracker.mapper.decorator.RoleDependendUserMapperDecorator;
+import org.mapstruct.*;
 
 import java.util.List;
 
 @Mapper(config = MapperConfig.class)
+@DecoratedWith(RoleDependendUserMapperDecorator.class)
 public interface UserMapper {
 
     @Mappings({
