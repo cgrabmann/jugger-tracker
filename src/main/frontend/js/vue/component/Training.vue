@@ -9,6 +9,9 @@
                 <v-layout column
                           justify-space-around>
                     <v-flex>
+                        <ErrorMessage v-model="errorMessageData"/>
+                    </v-flex>
+                    <v-flex>
                         <v-menu
                                 lazy
                                 :close-on-content-click="true"
@@ -52,14 +55,20 @@
                                         :selected="participant.selected"
                                         :key="participant.id"
                                         close
-                                        class="chip--select-multi"
+                                        :class="(participant.item.trackable ? 'trackable' : 'not-trackable') + ' chip--select-multi'"
                                         @input="participant.parent.selectItem(participant.item)"
-                                >{{ participant.item.firstName }} {{ participant.item.lastName }}
+                                >
+                                    <v-icon v-if="!participant.item.trackable">error</v-icon>
+                                    {{ participant.item.firstName }} {{ participant.item.lastName }}
                                 </v-chip>
                             </template>
                             <template slot="item"
                                       slot-scope="participant">
-                                {{ participant.item.firstName }} {{ participant.item.lastName }}
+                                <div :class="participant.item.trackable ? 'trackable' : 'not-trackable'">
+                                    <v-icon v-if="!participant.item.trackable">error</v-icon>
+                                    {{ participant.item.firstName }}
+                                    {{ participant.item.lastName }}
+                                </div>
                             </template>
                         </v-select>
                     </v-flex>
@@ -84,6 +93,36 @@
                 </v-layout>
             </v-container>
         </v-form>
+        <v-dialog
+                v-model="showTrackableDialog"
+                max-width="450"
+        >
+            <v-card>
+                <v-card-title class="headline">Ungültige Teilnehmer-Auswahl</v-card-title>
+
+                <v-card-text>
+                    Einige der ausgewählten Teilnehmer wollen nicht aufgezeichnet werden.
+                </v-card-text>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                            color="secondary"
+                            flat="flat"
+                            @click="showTrackableDialog = false"
+                    >
+                        Abbrechen
+                    </v-btn>
+                    <v-btn
+                            color="primary"
+                            flat="flat"
+                            @click="correctParticipationAndSave()"
+                    >
+                        Korrigieren &amp; Speichern
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-card>
 </template>
 
@@ -96,8 +135,10 @@
     import User from "./User.vue";
     import {Training} from 'juggerApi';
     import moment from 'moment';
+    import ErrorMessage, {ErrorMessageData} from "./ErrorMessage.vue";
 
     @Component({
+        components: {ErrorMessage},
         beforeRouteEnter(to, from, next) {
             const id = to.params.id;
             if (!moment(id, 'YYYY-MM-DD', true).isValid() && id !== 'new') {
@@ -134,6 +175,8 @@
         id: (string | number) = null;
         fab: boolean = false;
         saving: boolean = false;
+        showTrackableDialog: boolean = false;
+        errorMessageData: ErrorMessageData = null;
 
         openNew(id: (string | number)) {
             this.id = id;
@@ -151,17 +194,39 @@
             }
         }
 
+        correctParticipationAndSave() {
+            this.trainingState.editTraining.participants = this.trainingState.editTraining.participants.filter((user) => {
+                return user.trackable;
+            });
+            this.showTrackableDialog = false;
+            this.saveTraining();
+        }
+
         saveTraining() {
+            for (let user: User of this.trainingState.editTraining.participants) {
+                if (!user.trackable) {
+                    this.showTrackableDialog = true;
+                    return;
+                }
+            }
+
             this.fab = false;
             this.saving = true;
+
             let promise: Promise;
             if (this.id === "new") {
                 promise = this.createTraining(this.trainingState.editTraining)
             } else {
                 promise = this.updateTraining({date: this.id, training: this.trainingState.editTraining})
             }
+
             promise.then(() => {
                     this.$router.push('/trainings');
+                },
+                (response: Response) => {
+                    return response.json().then((data: TrackerError) => {
+                        this.errorMessageData = ErrorMessageData.fromTrackerError(this.$vuetify, data);
+                    });
                 })
                 .finally(() => {
                     this.saving = false;
@@ -174,8 +239,13 @@
                 this.saving = true;
                 this.deleteTraining(this.id)
                     .then(() => {
-                        this.$router.push('/trainings')
-                    })
+                            this.$router.push('/trainings')
+                        },
+                        (response: Response) => {
+                            return response.json().then((data: TrackerError) => {
+                                this.errorMessageData = ErrorMessageData.fromTrackerError(this.$vuetify, data);
+                            });
+                        })
                     .finally(() => {
                         this.saving = false;
                     });
@@ -201,5 +271,12 @@
 </script>
 
 <style scoped>
+    .v-list__tile .not-trackable {
+        color: lightgray;
+    }
 
+    .v-chip.not-trackable.not-trackable {
+        color: darkred;
+        background-color: lightcoral;
+    }
 </style>
