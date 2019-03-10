@@ -9,6 +9,7 @@ import at.jugger.tracker.repository.TrainingRepository;
 import at.jugger.tracker.repository.UserRepository;
 import at.jugger.tracker.service.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -31,11 +32,6 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(userRepository.findByUserId(id));
     }
 
-    /**
-     * Returns a user based on an email
-     * @param email
-     * @return
-     */
     @Override
     public User getUserByEmail(@NotNull String email) {
         User user = userMapper.toDto(userRepository.findByEmail(email));
@@ -59,6 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public @NotNull User updateUser(Long id, UserData user) {
         UserEntity userEntity = userRepository.findByUserId(id);
 
