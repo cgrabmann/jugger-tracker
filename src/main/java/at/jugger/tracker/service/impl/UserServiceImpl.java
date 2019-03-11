@@ -8,6 +8,7 @@ import at.jugger.tracker.mapper.UserMapper;
 import at.jugger.tracker.repository.TrainingRepository;
 import at.jugger.tracker.repository.UserRepository;
 import at.jugger.tracker.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
