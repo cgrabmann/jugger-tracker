@@ -5,10 +5,12 @@ import at.jugger.tracker.dto.User;
 import at.jugger.tracker.dto.UserData;
 import at.jugger.tracker.exceptions.UserNotFoundException;
 import at.jugger.tracker.mapper.UserMapper;
+import at.jugger.tracker.repository.TrainingRepository;
 import at.jugger.tracker.repository.UserRepository;
 import at.jugger.tracker.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -19,10 +21,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final TrainingRepository trainingRepository;
 
-    UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    UserServiceImpl(UserRepository userRepository, UserMapper userMapper, TrainingRepository trainingRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.trainingRepository = trainingRepository;
     }
 
     @Override
@@ -30,11 +34,6 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(userRepository.findByUserId(id));
     }
 
-    /**
-     * Returns a user based on an email
-     * @param email
-     * @return
-     */
     @Override
     public User getUserByEmail(@NotNull String email) {
         User user = userMapper.toDto(userRepository.findByEmail(email));
@@ -58,11 +57,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public @NotNull User updateUser(Long id, UserData user) {
         UserEntity userEntity = userRepository.findByUserId(id);
 
         if (userEntity == null) {
             throw new UserNotFoundException("id", Long.toString(id));
+        }
+
+        if (userEntity.isTrackable() && !user.getTrackable()) {
+            trainingRepository.deleteAllParticipationsForUser(userEntity.getUserId());
         }
 
         userEntity = userMapper.toEntity(user, userEntity);
@@ -75,6 +79,4 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(@NotNull Long id) {
         userRepository.deleteById(id);
     }
-
-
 }
