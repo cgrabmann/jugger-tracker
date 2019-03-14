@@ -36,8 +36,7 @@
                 max-width="290"
         >
             <v-card>
-                <v-card-title class="headline">E-Mail verschickt</v-card-title>
-
+                <v-card-title class="headline elevation-1">E-Mail verschickt</v-card-title>
                 <v-card-text>
                     Unser persönliches Skynet hat dir eine <strong>E-Mail</strong> mit deinem <strong>Login
                     Link</strong> geschickt.
@@ -46,7 +45,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
-                            color="primary"
+                            color="success"
                             flat="flat"
                             @click="showDialog = false"
                     >

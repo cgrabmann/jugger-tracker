@@ -15,6 +15,7 @@
                         <v-text-field v-model="user.firstName"
                                       :counter="20"
                                       :rules="nameRules"
+                                      :disabled="!hasAdminRights"
                                       label="Vorname"
                                       browser-autocomplete="off"
                                       required></v-text-field>
@@ -23,6 +24,7 @@
                         <v-text-field v-model="user.lastName"
                                       :counter="20"
                                       :rules="nameRules"
+                                      :disabled="!hasAdminRights"
                                       label="Nachname"
                                       browser-autocomplete="off"
                                       required></v-text-field>
@@ -31,6 +33,7 @@
                         <v-text-field v-model="user.email"
                                       :counter="50"
                                       :rules="emailRules"
+                                      :disabled="!hasAdminRights"
                                       label="Email"
                                       type="email"
                                       required></v-text-field>
@@ -39,6 +42,7 @@
                         <v-select
                                 v-model="user.role"
                                 :items="userRoles"
+                                :disabled="!hasAdminRights"
                                 item-text="text"
                                 item-value="value"
                                 label="Rolle"
@@ -48,10 +52,12 @@
                     <v-flex>
                         <v-switch
                                 v-model="user.trackable"
+                                :disabled="!hasAdminRights"
                                 label="Trainingsbeteiligung aufzeichnen"
                                 color="primary"></v-switch>
                     </v-flex>
-                    <v-flex align-self-end>
+                    <v-flex v-if="hasAdminRights"
+                            align-self-end>
                         <v-spacer></v-spacer>
                         <v-btn v-if="!!user.id"
                                :loading="saving"
@@ -110,7 +116,7 @@
 <script lang="ts">
     import Vue from 'vue';
     import Component from 'vue-class-component';
-    import {Action, State} from 'vuex-class';
+    import {Action, Getter, State} from 'vuex-class';
     import {Namespace} from '../store/namespace';
     import {UserState} from '../store/types';
     import {TrackerError, User, UserData} from 'juggerApi'
@@ -148,6 +154,7 @@
         @Action('createUser', Namespace.USER) createUser;
         @Action('updateUser', Namespace.USER) updateUser;
         @Action('deleteUser', Namespace.USER) deleteUser;
+        @Getter('hasAdminRights', Namespace.USER) hasAdminRights: boolean;
 
         valid: boolean = false;
         id: (string | number) = null;
@@ -161,7 +168,8 @@
                 firstName: null,
                 lastName: null,
                 email: null,
-                trackable: true
+                trackable: true,
+                role: UserData.RoleEnum.MITGLIED
             } as User;
 
             this.id = id;

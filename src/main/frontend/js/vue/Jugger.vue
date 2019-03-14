@@ -1,6 +1,6 @@
 <template>
     <v-app light>
-        <template :v-if="false">
+        <template v-if="isLoggedIn">
             <v-bottom-nav v-if="$vuetify.breakpoint.smAndDown"
                           fixed
                           :value="true"
@@ -48,9 +48,12 @@
 <script lang="ts">
     import Vue from 'vue';
     import Component from 'vue-class-component';
+    import {Namespace} from './store/namespace';
+    import {Getter} from 'vuex-class';
 
     @Component
     export default class Jugger extends Vue {
+        @Getter('isLoggedIn', Namespace.USER) isLoggedIn: boolean;
 
         get routes(): any {
             return [
