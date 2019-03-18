@@ -3,7 +3,8 @@
         <v-toolbar fixed app>
             <v-toolbar-title>Trainings</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn round
+            <v-btn v-if="hasTrainerRights"
+                   round
                    dark
                    to="/trainings/new"
                    color="primary">
@@ -17,6 +18,7 @@
                 <v-flex>
                     <v-data-table :headers="headers"
                                   :items="trainings"
+                                  :pagination.sync="pagination"
                                   class="mb-3"
                                   hide-actions>
                         <template slot="items" slot-scope="props">
@@ -49,13 +51,31 @@
     import Component from 'vue-class-component';
     import {TrainingState} from "../store/types";
     import {Namespace} from "../store/namespace";
-    import {Action, State} from "vuex-class";
+    import {Action, Getter, State} from "vuex-class";
     import {Training, User} from "juggerApi";
 
-    @Component
+    @Component({
+        beforeRouteEnter(to, from, next) {
+            next(vm => {
+                vm.load();
+                next();
+            })
+        }
+    })
     export default class Trainings extends Vue {
         @State(Namespace.TRAINING.namespace) trainingState: TrainingState;
         @Action('getTrainings', Namespace.TRAINING) getTrainings: any;
+        @Getter('hasTrainerRights', Namespace.USER) hasTrainerRights: boolean;
+
+        private paginationData = null;
+
+        get pagination(): {descending: boolean} {
+            return this.paginationData;
+        }
+
+        set pagination(paginationData) {
+            this.paginationData = paginationData;
+        }
 
         get headers() {
             return [
@@ -89,8 +109,11 @@
             this.$router.push("/trainings/" + training.date);
         }
 
-        beforeMount() {
-            this.getTrainings();
+        load() {
+            this.getTrainings()
+                .then(() => {
+                    this.pagination.descending = false;
+                });
         }
 
         get trainingType(): Training.TypeEnum {

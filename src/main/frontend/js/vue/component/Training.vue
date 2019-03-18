@@ -12,7 +12,7 @@
                         <ErrorMessage v-model="errorMessageData"/>
                     </v-flex>
                     <v-flex>
-                        <v-menu
+                        <v-menu :disabled="!hasTrainerRights"
                                 lazy
                                 :close-on-content-click="true"
                                 transition="scale-transition"
@@ -23,6 +23,7 @@
                                     slot="activator"
                                     label="Datum"
                                     prepend-icon="event"
+                                    :disabled="!hasTrainerRights"
                                     :value="training.date"
                                     browser-autocomplete="off"
                                     readonly
@@ -37,6 +38,7 @@
                         <v-select
                                 v-model="training.type"
                                 :items="trainingTypes"
+                                :disabled="!hasTrainerRights"
                                 label="Typ"
                                 browser-autocomplete="off"
                         ></v-select>
@@ -44,6 +46,7 @@
                     <v-flex>
                         <v-select :items="users"
                                   v-model="training.participants"
+                                  :disabled="!hasTrainerRights"
                                   item-value="id"
                                   label="Teilnehmer"
                                   browser-autocomplete="off"
@@ -54,7 +57,7 @@
                                 <v-chip
                                         :selected="participant.selected"
                                         :key="participant.id"
-                                        close
+                                        :close="hasTrainerRights"
                                         :class="(participant.item.trackable ? 'trackable' : 'not-trackable') + ' chip--select-multi'"
                                         @input="participant.parent.selectItem(participant.item)"
                                 >
@@ -72,7 +75,8 @@
                             </template>
                         </v-select>
                     </v-flex>
-                    <v-flex align-self-end>
+                    <v-flex v-if="hasTrainerRights"
+                            align-self-end>
                         <v-spacer></v-spacer>
                         <v-btn v-if="id !== 'new'"
                                :loading="saving"
@@ -129,7 +133,7 @@
 <script lang="ts">
     import Vue from 'vue';
     import Component from 'vue-class-component';
-    import {Action, State} from "vuex-class";
+    import {Action, Getter, State} from "vuex-class";
     import {Namespace} from "../store/namespace";
     import {TrainingState, UserState} from "../store/types";
     import User from "./User.vue";
@@ -168,6 +172,7 @@
         @Action('updateTraining', Namespace.TRAINING) updateTraining;
         @Action('getTraining', Namespace.TRAINING) getTraining;
         @Action('deleteTraining', Namespace.TRAINING) deleteTraining;
+        @Getter('hasTrainerRights', Namespace.USER) hasTrainerRights: boolean;
 
         date: string = null;
         menu: boolean = false;

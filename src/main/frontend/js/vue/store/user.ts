@@ -61,6 +61,12 @@ export const UserModule: Module<UserState, RootState> = {
     getters: {
         isLoggedIn(state): boolean {
             return state.currentUser != null;
+        },
+        hasTrainerRights(state, getters): boolean {
+            return getters.isLoggedIn && [UserData.RoleEnum.TRAINER, UserData.RoleEnum.ADMIN].includes(state.currentUser.role);
+        },
+        hasAdminRights(state, getters): boolean {
+            return getters.isLoggedIn && state.currentUser.role == UserData.RoleEnum.ADMIN;
         }
     }
 };
