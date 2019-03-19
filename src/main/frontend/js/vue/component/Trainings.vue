@@ -69,7 +69,7 @@
 
         private paginationData = null;
 
-        get pagination(): {descending: boolean} {
+        get pagination(): {descending: boolean, rowsPerPage: number} {
             return this.paginationData;
         }
 
@@ -113,6 +113,7 @@
             this.getTrainings()
                 .then(() => {
                     this.pagination.descending = false;
+                    this.pagination.rowsPerPage = -1;
                 });
         }
 
