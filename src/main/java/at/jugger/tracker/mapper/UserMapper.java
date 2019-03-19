@@ -4,17 +4,22 @@ import at.jugger.tracker.config.MapperConfig;
 import at.jugger.tracker.domain.UserEntity;
 import at.jugger.tracker.dto.User;
 import at.jugger.tracker.dto.UserData;
-import org.mapstruct.*;
+import at.jugger.tracker.mapper.decorator.RoleDependendUserMapperDecorator;
+import org.mapstruct.DecoratedWith;
+import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
 
 import java.util.List;
 
 @Mapper(config = MapperConfig.class)
+@DecoratedWith(RoleDependendUserMapperDecorator.class)
 public interface UserMapper {
 
     @Mappings({
-            @Mapping(target = "id", source = "userId"),
-            @Mapping(target = "email", source = "email", ignore = true),
-            @Mapping(target = "role", source = "role", ignore = true)
+            @Mapping(target = "id", source = "userId")
     })
     User toDto(UserEntity entity);
 
@@ -22,16 +27,12 @@ public interface UserMapper {
 
     @Mappings({
             @Mapping(target = "userId", ignore = true),
-            @Mapping(target = "email", source = "email", ignore = true),
-            @Mapping(target = "role", source = "role", ignore = true),
             @Mapping(target = "trackable", defaultValue = "false")
     })
     UserEntity toEntity(UserData user, @MappingTarget UserEntity entity);
 
     @Mappings({
             @Mapping(target = "userId", ignore = true),
-            @Mapping(target = "email", source = "email", ignore = true),
-            @Mapping(target = "role", source = "role", ignore = true),
             @Mapping(target = "trackable", defaultValue = "false")
     })
     UserEntity toEntity(UserData newUser);
