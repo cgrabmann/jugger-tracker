@@ -5,7 +5,12 @@ import at.jugger.tracker.domain.UserEntity;
 import at.jugger.tracker.dto.User;
 import at.jugger.tracker.dto.UserData;
 import at.jugger.tracker.mapper.decorator.RoleDependendUserMapperDecorator;
-import org.mapstruct.*;
+import org.mapstruct.DecoratedWith;
+import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
 
 import java.util.List;
 
@@ -20,16 +25,16 @@ public interface UserMapper {
 
     List<User> toDtos(List<UserEntity> entities);
 
-    @Mapping(target = "trackable", defaultValue = "false")
-    @Mappings(
-            @Mapping(target = "userId", ignore = true)
-    )
+    @Mappings({
+            @Mapping(target = "userId", ignore = true),
+            @Mapping(target = "trackable", defaultValue = "false")
+    })
     UserEntity toEntity(UserData user, @MappingTarget UserEntity entity);
 
-    @Mapping(target = "trackable", defaultValue = "false")
-    @Mappings(
-            @Mapping(target = "userId", ignore = true)
-    )
+    @Mappings({
+            @Mapping(target = "userId", ignore = true),
+            @Mapping(target = "trackable", defaultValue = "false")
+    })
     UserEntity toEntity(UserData newUser);
 
     @InheritInverseConfiguration

@@ -6,8 +6,8 @@ import at.jugger.tracker.dto.User;
 import at.jugger.tracker.exceptions.TokenAlreadyUsedException;
 import at.jugger.tracker.exceptions.TokenExpiredException;
 import at.jugger.tracker.exceptions.TokenNotFoundException;
+import at.jugger.tracker.mapper.InsecureUserMapper;
 import at.jugger.tracker.mapper.LoginTokenMapper;
-import at.jugger.tracker.mapper.UserMapper;
 import at.jugger.tracker.repository.LoginTokenRepository;
 import at.jugger.tracker.service.AuthenticationService;
 import at.jugger.tracker.service.SecurityService;
@@ -24,16 +24,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private static final int TOKEN_VALID_FOR_X_MINUTES = 30;
 
     private final LoginTokenRepository loginTokenRepository;
-    private final UserMapper userMapper;
+    private final InsecureUserMapper insecureUserMapper;
     private final LoginTokenMapper loginTokenMapper;
     private final SecurityService securityService;
 
     AuthenticationServiceImpl(
-            LoginTokenRepository loginTokenRepository, UserMapper userMapper,
+            LoginTokenRepository loginTokenRepository, InsecureUserMapper insecureUserMapper,
             LoginTokenMapper loginTokenMapper, SecurityService securityService
     ) {
         this.loginTokenRepository = loginTokenRepository;
-        this.userMapper = userMapper;
+        this.insecureUserMapper = insecureUserMapper;
         this.loginTokenMapper = loginTokenMapper;
         this.securityService = securityService;
     }
@@ -46,7 +46,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         loginToken.setUsed(false);
-        loginToken.setUser(userMapper.toEntity(user));
+        loginToken.setUser(insecureUserMapper.toEntity(user));
         loginToken.setExpiryDate(LocalDateTime.now().plusMinutes(TOKEN_VALID_FOR_X_MINUTES));
         loginToken.setToken(generateTokenId());
 

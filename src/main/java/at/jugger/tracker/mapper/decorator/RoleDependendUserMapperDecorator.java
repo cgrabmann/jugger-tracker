@@ -1,11 +1,9 @@
 package at.jugger.tracker.mapper.decorator;
 
-import at.jugger.tracker.config.MapperConfig;
 import at.jugger.tracker.domain.UserEntity;
 import at.jugger.tracker.dto.User;
 import at.jugger.tracker.mapper.UserMapper;
 import at.jugger.tracker.service.SecurityService;
-import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -29,7 +27,7 @@ public abstract class RoleDependendUserMapperDecorator implements UserMapper {
 
         if (!securityService.currentUserHasRole(ADMIN.name()) && !securityService.isCurrentUser(dto)) {
             dto.email(null)
-               .role(null);
+                    .role(null);
         }
 
         return dto;
