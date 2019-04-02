@@ -35,7 +35,7 @@
                                         <v-icon color="yellow">star</v-icon>
                                     </template>
                                 </td>
-                                <td>({{props.item.participants.length}})</td>
+                                <td>({{props.item.participantIds.length}})</td>
                                 <td><v-icon>keyboard_arrow_right</v-icon></td>
                             </tr>
                         </template>
@@ -93,7 +93,7 @@
                 },
                 {
                     text: '',
-                    value: 'participants',
+                    value: 'participantIds',
                     width: '1px',
                     sortable: false
                 },

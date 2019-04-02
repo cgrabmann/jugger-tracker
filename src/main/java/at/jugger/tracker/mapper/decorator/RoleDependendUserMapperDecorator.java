@@ -25,7 +25,9 @@ public abstract class RoleDependendUserMapperDecorator implements UserMapper {
     public User toDto(UserEntity entity) {
         User dto = delegate.toDto(entity);
 
-        if (!securityService.currentUserHasRole(ADMIN.name()) && !securityService.isCurrentUser(dto)) {
+        if (dto != null &&
+                !securityService.currentUserHasRole(ADMIN.name()) &&
+                !securityService.isCurrentUser(dto)) {
             dto.email(null)
                     .role(null);
         }

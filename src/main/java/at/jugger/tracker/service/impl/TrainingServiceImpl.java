@@ -4,10 +4,12 @@ import at.jugger.tracker.domain.TrainingEntity;
 import at.jugger.tracker.dto.Training;
 import at.jugger.tracker.dto.User;
 import at.jugger.tracker.exceptions.TrainingNotFoundException;
+import at.jugger.tracker.exceptions.UserNotFoundException;
 import at.jugger.tracker.exceptions.UserNotTrackableException;
 import at.jugger.tracker.mapper.TrainingMapper;
 import at.jugger.tracker.repository.TrainingRepository;
 import at.jugger.tracker.service.TrainingService;
+import at.jugger.tracker.service.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
@@ -19,10 +21,12 @@ public class TrainingServiceImpl implements TrainingService {
 
     private final TrainingRepository trainingRepository;
     private final TrainingMapper trainingMapper;
+    private final UserService userService;
 
-    public TrainingServiceImpl(TrainingRepository trainingRepository, TrainingMapper trainingMapper) {
+    public TrainingServiceImpl(TrainingRepository trainingRepository, TrainingMapper trainingMapper, UserService userService) {
         this.trainingRepository = trainingRepository;
         this.trainingMapper = trainingMapper;
+        this.userService = userService;
     }
 
     @Override
@@ -63,7 +67,13 @@ public class TrainingServiceImpl implements TrainingService {
     }
 
     private void checkTrackableFieldAndThrow(Training training) {
-        for (User participant : training.getParticipants()) {
+        for (Long participantId : training.getParticipantIds()) {
+            User participant = userService.getUser(participantId);
+
+            if (participant == null) {
+                throw new UserNotFoundException("id", Long.toString(participantId));
+            }
+
             if (!participant.getTrackable()) {
                 throw new UserNotTrackableException(participant);
             }
