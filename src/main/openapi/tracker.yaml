@@ -36,8 +36,8 @@ paths:
         content:
           application/json:
             schema:
-              required: true
               $ref: '#/components/schemas/UserData'
+        required: true
       responses:
         200:
           description: OK
@@ -101,8 +101,8 @@ paths:
         content:
           application/json:
             schema:
-              required: true
               $ref: '#/components/schemas/UserData'
+        required: true
       responses:
         200:
           description: OK
@@ -416,10 +416,11 @@ components:
         type:
           type: string
           enum: [klein, groß, spezial]
-        participants:
+        participantIds:
           type: array
           items:
-            $ref: '#/components/schemas/User'
+            type: integer
+            format: int64
     ApplicationPhase:
       properties:
         id:

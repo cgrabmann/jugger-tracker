@@ -5,6 +5,7 @@ import at.jugger.tracker.domain.UserEntity;
 import at.jugger.tracker.dto.User;
 import at.jugger.tracker.dto.UserData;
 import at.jugger.tracker.mapper.decorator.RoleDependendUserMapperDecorator;
+import at.jugger.tracker.repository.UserRepository;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
@@ -14,7 +15,7 @@ import org.mapstruct.Mappings;
 
 import java.util.List;
 
-@Mapper(config = MapperConfig.class)
+@Mapper(config = MapperConfig.class, uses = {UserRepository.class})
 @DecoratedWith(RoleDependendUserMapperDecorator.class)
 public interface UserMapper {
 
@@ -39,5 +40,13 @@ public interface UserMapper {
 
     @InheritInverseConfiguration
     UserEntity toEntity(User user);
+
+    UserEntity toEntity(Long id);
+
+    default Long toId(UserEntity user) {
+        return user.getUserId();
+    }
+
+    List<Long> toIds(List<UserEntity> users);
 
 }

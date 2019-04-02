@@ -10,6 +10,9 @@ import java.util.List;
 @Mapper(config = MapperConfig.class, uses = UserMapper.class)
 public interface TrainingMapper {
 
+    @Mappings({
+            @Mapping(target = "participantIds", source = "participants")
+    })
     Training toDto(TrainingEntity entity);
 
     List<Training> toDtos(List<TrainingEntity> entities);

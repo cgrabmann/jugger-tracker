@@ -45,34 +45,17 @@
                     </v-flex>
                     <v-flex>
                         <v-select :items="users"
-                                  v-model="training.participants"
+                                  v-model="training.participantIds"
                                   :disabled="!hasTrainerRights"
+                                  chips
+                                  deletable-chips
+                                  small-chips
                                   item-value="id"
+                                  :item-text="participantText"
+                                  :item-disabled="showParticipantDisabled"
                                   label="Teilnehmer"
                                   browser-autocomplete="off"
-                                  multiple
-                                  return-object>
-                            <template slot="selection"
-                                      slot-scope="participant">
-                                <v-chip
-                                        :selected="participant.selected"
-                                        :key="participant.id"
-                                        :close="hasTrainerRights"
-                                        :class="(participant.item.trackable ? 'trackable' : 'not-trackable') + ' chip--select-multi'"
-                                        @input="participant.parent.selectItem(participant.item)"
-                                >
-                                    <v-icon v-if="!participant.item.trackable">error</v-icon>
-                                    {{ participant.item.firstName }} {{ participant.item.lastName }}
-                                </v-chip>
-                            </template>
-                            <template slot="item"
-                                      slot-scope="participant">
-                                <div :class="participant.item.trackable ? 'trackable' : 'not-trackable'">
-                                    <v-icon v-if="!participant.item.trackable">error</v-icon>
-                                    {{ participant.item.firstName }}
-                                    {{ participant.item.lastName }}
-                                </div>
-                            </template>
+                                  multiple>
                         </v-select>
                     </v-flex>
                     <v-flex v-if="hasTrainerRights"
@@ -97,36 +80,6 @@
                 </v-layout>
             </v-container>
         </v-form>
-        <v-dialog
-                v-model="showTrackableDialog"
-                max-width="450"
-        >
-            <v-card>
-                <v-card-title class="headline">Ungültige Teilnehmer-Auswahl</v-card-title>
-
-                <v-card-text>
-                    Einige der ausgewählten Teilnehmer wollen nicht aufgezeichnet werden.
-                </v-card-text>
-
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                            color="secondary"
-                            flat="flat"
-                            @click="showTrackableDialog = false"
-                    >
-                        Abbrechen
-                    </v-btn>
-                    <v-btn
-                            color="primary"
-                            flat="flat"
-                            @click="correctParticipationAndSave()"
-                    >
-                        Korrigieren &amp; Speichern
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
     </v-card>
 </template>
 
@@ -178,7 +131,6 @@
         menu: boolean = false;
         modal: boolean = false;
         id: (string | number) = null;
-        fab: boolean = false;
         saving: boolean = false;
         showTrackableDialog: boolean = false;
         errorMessageData: ErrorMessageData = null;
@@ -190,7 +142,7 @@
                 this.trainingState.editTraining = {
                     date: moment(new Date()).format("YYYY-MM-DD"),
                     type: "klein",
-                    participants: []
+                    participantIds: []
                 } as Training;
             } else {
                 this.getTraining(id).then(() => {
@@ -200,23 +152,14 @@
         }
 
         correctParticipationAndSave() {
-            this.trainingState.editTraining.participants = this.trainingState.editTraining.participants.filter((user) => {
-                return user.trackable;
+            this.trainingState.editTraining.participantIds = this.trainingState.editTraining.participantIds.filter((userId) => {
+                return this.users.find((user) => user.userId == userId).trackable;
             });
             this.showTrackableDialog = false;
             this.saveTraining();
         }
 
         saveTraining() {
-            if (this.trainingState.editTraining.participants.some(
-                (user: User) => {
-                    return !user.trackable;
-                })) {
-                this.showTrackableDialog = true;
-                return;
-            }
-
-            this.fab = false;
             this.saving = true;
 
             let promise: Promise;
@@ -240,7 +183,6 @@
         }
 
         removeTraining() {
-            this.fab = false;
             if (confirm("Training vom " + this.id + " wirklich löschen?")) {
                 this.saving = true;
                 this.deleteTraining(this.id)
@@ -256,6 +198,14 @@
                         this.saving = false;
                     });
             }
+        }
+
+        showParticipantDisabled(user: User, fallback?: any): boolean {
+            return !user.trackable;
+        }
+
+        participantText(user: User, fallback?: any): string {
+            return user.firstName + " " + user.lastName;
         }
 
         get toolbarTitle(): string {
@@ -277,12 +227,4 @@
 </script>
 
 <style scoped>
-    .v-list__tile .not-trackable {
-        color: lightgray;
-    }
-
-    .v-chip.not-trackable.not-trackable {
-        color: darkred;
-        background-color: lightcoral;
-    }
 </style>
